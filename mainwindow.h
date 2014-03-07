@@ -6,6 +6,9 @@
 #include <QtGui>
 #include <QMessageBox>
 #include <QTabWidget>
+#include <QtSql>
+#include <QSqlDatabase>
+#include <QDebug>
 
 namespace Ui {
 class MainWindow;
@@ -32,8 +35,17 @@ private slots:
 
     void on_actionNew_Language_triggered();
 
+    void on_dictionary_Button_clicked();
+
+    void on_games_Button_clicked();
+
+    void on_thesaurus_Button_clicked();
+
 private:
     Ui::MainWindow *ui;
+    QSqlTableModel *sqlTableModel;
+    QSqlDatabase db;
+    QStringListModel *stringListModel;
 };
 
 #endif // MAINWINDOW_H

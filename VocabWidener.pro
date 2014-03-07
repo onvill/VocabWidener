@@ -6,6 +6,7 @@
 
 QT += core gui\
             widgets
+QT += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -19,6 +20,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
+
+RC_FILE = myapp.rc
 
 RESOURCES += \
     languagesIcons.qrc

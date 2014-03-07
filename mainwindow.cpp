@@ -5,6 +5,8 @@
 #include <QMessageBox>
 #include <QTabWidget>
 #include <QAction>
+#include <QPushbutton>
+#include <QIcon>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -12,10 +14,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    stringListModel = new QStringListModel(this);
+    QStringList languageList;
+    languageList << "Irish" << "Spanish" << "Cebuano";
 
-    ui->comboBox->addItem("Spanish");
-    ui->comboBox->addItem("Irish");
-    ui->comboBox->addItem("Cebuano");
+    stringListModel->setStringList(languageList);
+    ui->comboBox->setModel(stringListModel);
+
+
+    db = QSqlDatabase::addDatabase("QODBC");
+    db.setHostName("LOCALHOST");
+    db.setDatabaseName("FinalProjectDB");
+    if(!db.open()){
+        qDebug() << "ERROR = " << db.lastError().text();
+        QApplication::quit();
+    }
+
+    ui->lineEditL->setText("Search");
 
 }
 
@@ -44,6 +59,19 @@ void MainWindow::on_actionExit_triggered(){
     QApplication::quit();   // EXIT
 }
 
-void MainWindow::on_actionNew_Language_triggered(){ // New Language, create two columns
+void MainWindow::on_actionNew_Language_triggered(){ // New Language
+    // Dialog asking for Info of new language. Name,
+    //ui->comboBox->addItem("Spanish"); // to add language in comboBox
+}
 
+void MainWindow::on_dictionary_Button_clicked(){ // DICTIONARY
+    ui->dictionary_Button->setStyleSheet("background-color: gray");
+}
+
+void MainWindow::on_games_Button_clicked(){ // GAMES
+    ui->games_Button->setStyleSheet("background-color: gray");
+}
+
+void MainWindow::on_thesaurus_Button_clicked(){ //THESAURUS
+    ui->thesaurus_Button->setStyleSheet("background-color: gray");
 }
