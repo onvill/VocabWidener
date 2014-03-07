@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/languages">
+        <file>languages/Philippines-Flag-icon.png</file>
+        <file>languages/Spain-Flag.png</file>
+        <file>languages/UK.jpg</file>
+        <file>languages/irish_flag.jpg</file>
+    </qresource>
+</RCC>
