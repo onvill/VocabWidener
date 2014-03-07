@@ -12,8 +12,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-   // setCentralWidget(ui->tabWidget);
 
+    ui->comboBox->addItem("Spanish");
+    ui->comboBox->addItem("Irish");
+    ui->comboBox->addItem("Cebuano");
 
 }
 

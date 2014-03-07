@@ -22,8 +22,6 @@ public:
 private slots:
     void on_actionAbout_triggered();
 
-    void on_actionEnglish_triggered();
-
     void on_actionSpanish_triggered();
 
     void on_actionCebuano_triggered();
