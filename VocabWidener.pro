@@ -15,9 +15,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    dbqeurier.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    dbqeurier.h
 
 FORMS    += mainwindow.ui
 

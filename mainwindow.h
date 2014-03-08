@@ -9,6 +9,8 @@
 #include <QtSql>
 #include <QSqlDatabase>
 #include <QDebug>
+#include <QTranslator>
+#include "dbqeurier.h"
 
 namespace Ui {
 class MainWindow;
@@ -41,11 +43,15 @@ private slots:
 
     void on_thesaurus_Button_clicked();
 
+    void on_lookUpButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     QSqlTableModel *sqlTableModel;
-    QSqlDatabase db;
+    //QSqlDatabase db;
     QStringListModel *stringListModel;
+
+    DBQeurier *dbqe;
 };
 
 #endif // MAINWINDOW_H

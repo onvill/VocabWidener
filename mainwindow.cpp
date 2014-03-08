@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "dbqeurier.h"
 #include <QtCore>
 #include <QtGui>
 #include <QMessageBox>
@@ -14,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     stringListModel = new QStringListModel(this);
     QStringList languageList;
     languageList << "Irish" << "Spanish" << "Cebuano";
@@ -21,14 +23,14 @@ MainWindow::MainWindow(QWidget *parent) :
     stringListModel->setStringList(languageList);
     ui->comboBox->setModel(stringListModel);
 
-
-    db = QSqlDatabase::addDatabase("QODBC");
+    dbqe = new DBQeurier();
+    /*db = QSqlDatabase::addDatabase("QODBC");
     db.setHostName("LOCALHOST");
     db.setDatabaseName("FinalProjectDB");
     if(!db.open()){
         qDebug() << "ERROR = " << db.lastError().text();
         QApplication::quit();
-    }
+    }*/
 
     ui->lineEditL->setText("Search");
 
@@ -65,6 +67,7 @@ void MainWindow::on_actionNew_Language_triggered(){ // New Language
 }
 
 void MainWindow::on_dictionary_Button_clicked(){ // DICTIONARY
+    qDebug() << "The current Language is: ";
     ui->dictionary_Button->setStyleSheet("background-color: gray");
 }
 
@@ -74,4 +77,11 @@ void MainWindow::on_games_Button_clicked(){ // GAMES
 
 void MainWindow::on_thesaurus_Button_clicked(){ //THESAURUS
     ui->thesaurus_Button->setStyleSheet("background-color: gray");
+}
+
+void MainWindow::on_lookUpButton_clicked(){ // Lookup
+    QString data =  ui->comboBox->currentText();
+    //qDebug() << "Language Chosen is: " << data;
+    qDebug() << dbqe->getDefinition(data, "ansin");
+    //dbqe->addEntry("cebuano","test", "teststs");
 }
