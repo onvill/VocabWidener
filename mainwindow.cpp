@@ -10,6 +10,7 @@
 #include <QIcon>
 
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -63,6 +64,7 @@ void MainWindow::on_actionExit_triggered(){
 
 void MainWindow::on_actionNew_Language_triggered(){ // New Language
     // Dialog asking for Info of new language. Name,
+    qDebug() << dbqe->addNewLanguage("Nawat");
     //ui->comboBox->addItem("Spanish"); // to add language in comboBox
 }
 
@@ -72,16 +74,29 @@ void MainWindow::on_dictionary_Button_clicked(){ // DICTIONARY
 }
 
 void MainWindow::on_games_Button_clicked(){ // GAMES
+    qDebug() << "GAMESSS";
     ui->games_Button->setStyleSheet("background-color: gray");
 }
 
 void MainWindow::on_thesaurus_Button_clicked(){ //THESAURUS
     ui->thesaurus_Button->setStyleSheet("background-color: gray");
+
+    QString data =  ui->comboBox->currentText();
+    qDebug() << data << " The Synonyms are ::";
+
+    //dbqe->associateWord("spanish", "amigo", "crapppp ");
+
+    QStringList Liste = dbqe->getSynonyms("spanish","amigo");
+    foreach (QString str, Liste){
+        qDebug() << str;
+    }
 }
 
 void MainWindow::on_lookUpButton_clicked(){ // Lookup
     QString data =  ui->comboBox->currentText();
     //qDebug() << "Language Chosen is: " << data;
-    qDebug() << dbqe->getDefinition(data, "ansin");
+    qDebug() << dbqe->getDefinition(ui->comboBox->currentText(), "amigo");
+
     //dbqe->addEntry("cebuano","test", "teststs");
+    //dbqe->updateDefinition("cebuano","itom", "black");
 }

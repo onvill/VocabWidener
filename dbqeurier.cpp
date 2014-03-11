@@ -16,15 +16,6 @@ DBQeurier::DBQeurier()
 
     //QString sQuery = "INSERT INTO test.people (id, first, last) VALUES(:id, :first, :last)";
 
-
-   /*if(query.exec()){
-            qDebug() << "Record Inserted!!";
-    } else {
-        qDebug() << "ERRORRR = " << db.lastError().text();
-    }
-    */
-
-    //db.close();
 }
 
 //Dictionary methods
@@ -32,12 +23,14 @@ QString DBQeurier::getDefinition(QString language, QString wordToFind){
     //QSqlQuery query("SELECT cebuano FROM language",db);
     /* query.exec("SELECT irish FROM language"); */
 
-    QString output;
+   // qDebug() << language << wordToFind;
     qStm = QString("SELECT definition FROM %1 WHERE word = '%2'").arg(language.toLower()).arg(wordToFind.toLower());
     QSqlQuery query(qStm,db);
     while(query.next()){
         output = query.value(0).toString();
+        //qDebug() << output;
     }
+
     return output;
 }
 
@@ -58,21 +51,58 @@ void DBQeurier::addEntry(QString language, QString word, QString def){
     }
 }
 
-void DBQeurier::updateDefinition(QString language, QString word){
+void DBQeurier::updateDefinition(QString language, QString word, QString newDef){
+    qStm = QString("UPDATE %1 SET definition = '%2' WHERE word = '%3'").arg(language.toLower()).arg(newDef).arg(word);
+    //qDebug() << qStm;
+    QSqlQuery query;
+    query.prepare(qStm);
+
+    if(query.exec()){
+        QMessageBox::information(this, "Database Updated",
+                                 QString("The definition of %1' is updated").arg(word));
+    }
     /*qry.bindValue(":id","4");
     qry.bindValue(":first","Heather");
     qry.bindValue(":last","SuperMan");*/
 }
 
 //Thesaurus methods
-QStringList DBQeurier::getSynonyms(){
+QStringList DBQeurier::getSynonyms(QString language, QString word){
+    // the synonyms of a word are on the third column of the table
+    QStringList synonyms;
+    qStm = QString("SELECT synonyms FROM %1 WHERE word = '%2'").arg(language.toLower()).arg(word.toLower());
+    QSqlQuery query(qStm,db);
 
+    while(query.next()){
+        output = query.value(0).toString();
+    }
+     synonyms = output.split("|");
+     qDebug() << "METHOD INVOKED";
+    /*QMessageBox::warning(this, "Word not in Database",
+        QString("%1 is not in the database").arg(word));*/
+
+    return synonyms;
 }
 
-void DBQeurier::associateWord(QString addWord, QString word){
-
+void DBQeurier::associateWord(QString language, QString word, QString wordToAdd){
+    qStm = QString("UPDATE %1 SET synonyms = CONCAT(synonyms, '%2|') WHERE word = '%3'").arg(language.toLower()).arg(wordToAdd.toLower()).arg(word.toLower());
+    QSqlQuery query;
+    query.prepare(qStm);
+    if(query.exec()){
+        QMessageBox::information(this, "Synonym Added",
+                                 QString("The word '%1' now has a synonym '%2'").arg(word).arg(wordToAdd));
+    }
 }
 
-void DBQeurier::addNewLanguage(){
-
+bool DBQeurier::addNewLanguage(QString language){
+    // Create table "person"
+    qStm = QString("CREATE TABLE finalproject.%1 (word VARCHAR(45) NOT NULL, definition VARCHAR(255) NOT NULL, synonyms TEXT NULL, PRIMARY KEY (word))").arg(language.toLower());
+    bool ret = false;
+    if (db.isOpen()){
+        QSqlQuery query;
+        query.prepare(qStm);
+        ret = query.exec();
+    }
+    qDebug() << "ERROR: " << db.lastError().text();
+    return ret;
 }

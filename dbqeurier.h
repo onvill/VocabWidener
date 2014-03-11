@@ -14,21 +14,21 @@ public:
     int one();
     //Dictionary methods
     QString getDefinition(QString language, QString wordToFind);
-    void updateDefinition(QString language, QString word);
+    void updateDefinition(QString language, QString word, QString newDef);
     void addEntry(QString language, QString word, QString def);
     void newlanguage();
 
 
     //Thesaurus methods
-    QStringList getSynonyms();
-    void associateWord(QString addWord, QString word);
+     QStringList getSynonyms(QString language, QString word);
+    void associateWord(QString language, QString word, QString wordToAdd);
 
-    void addNewLanguage();
-
+    bool addNewLanguage(QString language);
 
 private:
     QString qStm;
     QSqlDatabase db;
+    QString output;
    // QSqlQuery *query;
 };
 
