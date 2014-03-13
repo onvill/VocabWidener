@@ -12,6 +12,7 @@
 #include <QTranslator>
 #include "dbqeurier.h"
 
+
 namespace Ui {
 class MainWindow;
 }
@@ -45,13 +46,15 @@ private slots:
 
     void on_lookUpButton_clicked();
 
+
 private:
     Ui::MainWindow *ui;
     QSqlTableModel *sqlTableModel;
     //QSqlDatabase db;
     QStringListModel *stringListModel;
-
     DBQeurier *dbqe;
+    int buttonClicked;
+
 };
 
 #endif // MAINWINDOW_H

@@ -8,6 +8,7 @@
 #include <QAction>
 #include <QPushbutton>
 #include <QIcon>
+#include "games.h"
 
 
 
@@ -16,6 +17,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    buttonClicked = 1;
+    ui->dictionary_Button->setStyleSheet("background-color: white");
+    ui->games_Button->setStyleSheet("background-color: gray");
+    ui->thesaurus_Button->setStyleSheet("background-color: gray");
 
     stringListModel = new QStringListModel(this);
     QStringList languageList;
@@ -25,20 +30,85 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->comboBox->setModel(stringListModel);
 
     dbqe = new DBQeurier();
-    /*db = QSqlDatabase::addDatabase("QODBC");
-    db.setHostName("LOCALHOST");
-    db.setDatabaseName("FinalProjectDB");
-    if(!db.open()){
-        qDebug() << "ERROR = " << db.lastError().text();
-        QApplication::quit();
-    }*/
 
     ui->lineEditL->setText("Search");
+    //connect(ui->lookUpButton,SIGNAL(clicked()), this,SLOT(on_lookUpButton_clicked()));
+
 
 }
 
 MainWindow::~MainWindow(){
     delete ui;
+}
+
+//      DICTIONARY
+void MainWindow::on_dictionary_Button_clicked(){
+    qDebug() << "DICTIONARY";
+    buttonClicked = 1;
+    ui->dictionary_Button->setStyleSheet("background-color: white");
+    ui->games_Button->setStyleSheet("background-color: gray");
+    ui->thesaurus_Button->setStyleSheet("background-color: gray");
+}
+
+//      THESAURUS
+void MainWindow::on_thesaurus_Button_clicked(){
+    buttonClicked = 2;
+    ui->thesaurus_Button->setStyleSheet("background-color: white");
+    ui->dictionary_Button->setStyleSheet("background-color: gray");
+    ui->games_Button->setStyleSheet("background-color: gray");
+    qDebug() << "THESAURUS";
+}
+
+//      GAMES GAMES GAMES
+void MainWindow::on_games_Button_clicked(){
+    qDebug() << "GAMESSS";
+    buttonClicked = 3;
+    ui->games_Button->setStyleSheet("background-color: white");
+    ui->dictionary_Button->setStyleSheet("background-color: gray");
+    ui->thesaurus_Button->setStyleSheet("background-color: gray");
+
+    /*Games game;
+    game.setModal(true);
+    game.exec();*/
+}
+
+void MainWindow::on_lookUpButton_clicked(){ // Lookup
+    ui->textEdit->clear();
+    QString chosenLanguage = ui->comboBox->currentText();
+    QString word = ui->lineEditL->text();
+    QString definition, textToShow;
+    QStringList synonyms;
+
+
+    if(buttonClicked == 1){// Dictionary
+        definition = dbqe->getDefinition(chosenLanguage, word);
+        textToShow = QString("Word: %1 \n\n Definition: %2").arg(word).arg(definition);
+        ui->textEdit->append(textToShow);
+    }
+
+    if(buttonClicked == 2){ // Thesaurus
+        textToShow = QString("Word: %1 \n\n").arg(word);
+        ui->textEdit->append(textToShow);
+        textToShow = QString("Synonyms: ");
+        ui->textEdit->append(textToShow);
+
+        synonyms = dbqe->getSynonyms(chosenLanguage, word);
+        textToShow = "";
+        foreach(QString str, synonyms){
+            textToShow = QString(textToShow + "%1 \n").arg(str);
+        }
+
+        ui->textEdit->append(textToShow);
+    }
+
+    //dbqe->addEntry("cebuano","test", "tests");
+    //dbqe->updateDefinition("cebuano","itom", "black");
+}
+
+void MainWindow::on_actionNew_Language_triggered(){ // New Language
+    // Dialog asking for Info of new language. Name,
+    qDebug() << dbqe->addNewLanguage("Nawat");
+    //ui->comboBox->addItem("Spanish"); // to add language in comboBox
 }
 
 void MainWindow::on_actionAbout_triggered(){
@@ -60,43 +130,4 @@ void MainWindow::on_actionIrish_triggered(){
 
 void MainWindow::on_actionExit_triggered(){
     QApplication::quit();   // EXIT
-}
-
-void MainWindow::on_actionNew_Language_triggered(){ // New Language
-    // Dialog asking for Info of new language. Name,
-    qDebug() << dbqe->addNewLanguage("Nawat");
-    //ui->comboBox->addItem("Spanish"); // to add language in comboBox
-}
-
-void MainWindow::on_dictionary_Button_clicked(){ // DICTIONARY
-    qDebug() << "The current Language is: ";
-    ui->dictionary_Button->setStyleSheet("background-color: gray");
-}
-
-void MainWindow::on_games_Button_clicked(){ // GAMES
-    qDebug() << "GAMESSS";
-    ui->games_Button->setStyleSheet("background-color: gray");
-}
-
-void MainWindow::on_thesaurus_Button_clicked(){ //THESAURUS
-    ui->thesaurus_Button->setStyleSheet("background-color: gray");
-
-    QString data =  ui->comboBox->currentText();
-    qDebug() << data << " The Synonyms are ::";
-
-    //dbqe->associateWord("spanish", "amigo", "crapppp ");
-
-    QStringList Liste = dbqe->getSynonyms("spanish","amigo");
-    foreach (QString str, Liste){
-        qDebug() << str;
-    }
-}
-
-void MainWindow::on_lookUpButton_clicked(){ // Lookup
-    QString data =  ui->comboBox->currentText();
-    //qDebug() << "Language Chosen is: " << data;
-    qDebug() << dbqe->getDefinition(ui->comboBox->currentText(), "amigo");
-
-    //dbqe->addEntry("cebuano","test", "teststs");
-    //dbqe->updateDefinition("cebuano","itom", "black");
 }

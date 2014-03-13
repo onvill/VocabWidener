@@ -16,12 +16,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    dbqeurier.cpp
+    dbqeurier.cpp \
+    games.cpp
 
 HEADERS  += mainwindow.h \
-    dbqeurier.h
+    dbqeurier.h \
+    games.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    games.ui
 
 RC_FILE = myapp.rc
 
