@@ -9,23 +9,32 @@
 class DBQeurier : public QMainWindow
 {
 public:
-    DBQeurier();
+    static DBQeurier* instance();
 
-    int one();
     //Dictionary methods
-    QString getDefinition(QString language, QString wordToFind);
-    void updateDefinition(QString language, QString word, QString newDef);
-    void addEntry(QString language, QString word, QString def);
+    QString getDefinition(int lang_id, QString wordToFind);
+    void updateDefinition(int lang_id, QString word, QString newDef);
+    void addEntry(QString word, int lang_id, QString def, QString pronun);
     void newlanguage();
 
-
     //Thesaurus methods
-     QStringList getSynonyms(QString language, QString word);
-    void associateWord(QString language, QString word, QString wordToAdd);
+    QStringList getSynonyms(int lang_id, QString word);
+    void associateWord(QString word, QString wordToAdd);
+    bool addNewLanguage(int lang_id, QString language, QString iso_code);
+    void addSynEntry(QString word, QString syn);
 
-    bool addNewLanguage(QString language);
+    //Games methods
+    QStringList getWordsSet(int lang_id, int level, QString game);
+
+    //Login
+    int login(QString username, QString password);
+
 
 private:
+    static DBQeurier* m_instance;
+    DBQeurier();
+    ~DBQeurier(){};
+
     QString qStm;
     QSqlDatabase db;
     QString output;

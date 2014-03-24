@@ -280,27 +280,18 @@
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
          </widget>
         </item>
        </layout>
-       <zorder>layoutWidget</zorder>
        <zorder>textEdit</zorder>
        <zorder>line_2</zorder>
-       <zorder>horizontalSpacer</zorder>
-       <zorder></zorder>
        <zorder>frame_3</zorder>
       </widget>
      </widget>
     </item>
    </layout>
-   <zorder>line</zorder>
-   <zorder>frame_2</zorder>
-   <zorder>splitter</zorder>
-   <zorder>frame</zorder>
-   <zorder></zorder>
-   <zorder>splitter</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -339,7 +330,7 @@ p, li { white-space: pre-wrap; }
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionSpanish">
    <property name="icon">
-    <iconset>
+    <iconset resource="languagesIcons.qrc">
      <normaloff>:/languages/languages/Spain-Flag.png</normaloff>:/languages/languages/Spain-Flag.png</iconset>
    </property>
    <property name="text">
@@ -348,7 +339,7 @@ p, li { white-space: pre-wrap; }
   </action>
   <action name="actionCebuano">
    <property name="icon">
-    <iconset>
+    <iconset resource="languagesIcons.qrc">
      <normaloff>:/languages/languages/Philippines-Flag-icon.png</normaloff>:/languages/languages/Philippines-Flag-icon.png</iconset>
    </property>
    <property name="text">
@@ -356,18 +347,26 @@ p, li { white-space: pre-wrap; }
    </property>
   </action>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/prog_icons/icons/help-icon.png</normaloff>:/prog_icons/icons/help-icon.png</iconset>
+   </property>
    <property name="text">
     <string>About</string>
    </property>
   </action>
   <action name="actionExit">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/prog_icons/icons/exit.jpg</normaloff>:/prog_icons/icons/exit.jpg</iconset>
+   </property>
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
   <action name="actionIrish">
    <property name="icon">
-    <iconset>
+    <iconset resource="languagesIcons.qrc">
      <normaloff>:/languages/languages/irish_flag.jpg</normaloff>:/languages/languages/irish_flag.jpg</iconset>
    </property>
    <property name="text">
@@ -375,12 +374,19 @@ p, li { white-space: pre-wrap; }
    </property>
   </action>
   <action name="actionNew_Language">
+   <property name="icon">
+    <iconset resource="icons.qrc">
+     <normaloff>:/prog_icons/icons/add.png</normaloff>:/prog_icons/icons/add.png</iconset>
+   </property>
    <property name="text">
     <string>New Language</string>
    </property>
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="languagesIcons.qrc"/>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

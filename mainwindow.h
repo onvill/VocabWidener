@@ -27,25 +27,15 @@ public:
 
 private slots:
     void on_actionAbout_triggered();
-
     void on_actionSpanish_triggered();
-
     void on_actionCebuano_triggered();
-
     void on_actionIrish_triggered();
-
     void on_actionExit_triggered();
-
     void on_actionNew_Language_triggered();
-
     void on_dictionary_Button_clicked();
-
     void on_games_Button_clicked();
-
     void on_thesaurus_Button_clicked();
-
     void on_lookUpButton_clicked();
-
 
 private:
     Ui::MainWindow *ui;

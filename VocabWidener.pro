@@ -17,16 +17,20 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     dbqeurier.cpp \
-    games.cpp
+    games.cpp \
+    login.cpp
 
 HEADERS  += mainwindow.h \
     dbqeurier.h \
-    games.h
+    games.h \
+    login.h
 
 FORMS    += mainwindow.ui \
-    games.ui
+    games.ui \
+    login.ui
 
 RC_FILE = myapp.rc
 
 RESOURCES += \
-    languagesIcons.qrc
+    languagesIcons.qrc \
+    icons.qrc
