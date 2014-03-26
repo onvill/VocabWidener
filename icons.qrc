@@ -7,5 +7,7 @@
         <file>icons/sound.jpg</file>
         <file>icons/sound.png</file>
         <file>icons/sound-volume.png</file>
+        <file>icons/accept.png</file>
+        <file>icons/cross.png</file>
     </qresource>
 </RCC>

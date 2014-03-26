@@ -3,6 +3,8 @@
 
 #include <QDialog>
 #include "dbqeurier.h"
+#define LASTQUESTION 7
+
 
 namespace Ui {
 class Games;
@@ -23,13 +25,17 @@ private slots:
 
     void on_pushButton_AnswerB_clicked();
 
+
 private:
     int score;
-    bool paused;
+    bool m_buttonPressed;
+    int question;
+    QStringList liste;
+    QStringList portion;
 
     Ui::Games *ui;
     DBQeurier *dbqe;
-    void gamesHere();
+    void setUpDefinitionGame();
     int randomInt();
     QString wrongAnswerPicker(QStringList list, int i);
     QStringList definitionSet;
@@ -39,6 +45,9 @@ private:
     void delay();
     QString answer;
     QTimer *timer;
+    void answerChecker(QString ans, int q);
+    void nextQuestion();
+    void gameFinished();
 
 };
 
