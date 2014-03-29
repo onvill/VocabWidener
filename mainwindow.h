@@ -37,14 +37,24 @@ private slots:
     void on_thesaurus_Button_clicked();
     void on_lookUpButton_clicked();
 
+    void on_actionEnglish_triggered();
+
+protected slots:
+    void changeEvent(QEvent* event);
+
 private:
+    int buttonClicked;
+    QStringList languageList;
+    QTranslator translator;
+
     Ui::MainWindow *ui;
     QSqlTableModel *sqlTableModel;
     //QSqlDatabase db;
     QStringListModel *stringListModel;
     DBQeurier *dbqe;
-    int buttonClicked;
+    QTranslator m_translator;
 
+    void retranslate();
 };
 
 #endif // MAINWINDOW_H

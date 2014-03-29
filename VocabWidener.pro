@@ -20,6 +20,8 @@ SOURCES += main.cpp\
     games.cpp \
     login.cpp
 
+TRANSLATIONS += spa_translatione.ts gle_translatione.ts ceb_translatione.ts
+
 HEADERS  += mainwindow.h \
     dbqeurier.h \
     games.h \
@@ -33,4 +35,5 @@ RC_FILE = myapp.rc
 
 RESOURCES += \
     languagesIcons.qrc \
-    icons.qrc
+    icons.qrc \
+    translation_files.qrc

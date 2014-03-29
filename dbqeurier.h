@@ -25,6 +25,7 @@ public:
 
     //Games methods
     QStringList getWordsSet(int lang_id, int level, QString game);
+    QStringList getSynSet(int lang_id, int level);
 
     //Login
     int login(QString username, QString password);
@@ -38,7 +39,8 @@ private:
     QString qStm;
     QSqlDatabase db;
     QString output;
-   // QSqlQuery *query;
+    QStringList pairSet;
+    // QSqlQuery *query;
 };
 
 #endif // DBQEURIER_H

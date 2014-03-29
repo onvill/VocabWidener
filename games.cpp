@@ -7,7 +7,7 @@
 #include <QGraphicsScene>
 #include <QStateMachine>
 
-Games::Games(QWidget *parent) :
+Games::Games(const QStringList& langList, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Games)
 {
@@ -17,24 +17,33 @@ Games::Games(QWidget *parent) :
     dbqe = DBQeurier::instance();
     timer = new QTimer(this);
 
+    ui->langComboBox->addItems(langList); // populate the comboBox
+    ui->LangLabel->setText(tr("Language to Play"));
 
     QPixmap correct(":/prog_icons/icons/accept.png");
     QPixmap wrong(":/prog_icons/icons/cross.png");
     QIcon correctIcon(correct);
     QIcon wrongIcon(wrong);
 
-
     QPixmap soundIcon(":/prog_icons/icons/sound-volume.png");
     QIcon ButtonIcon(soundIcon);
     ui->soundButton->setIcon(ButtonIcon);
     ui->soundButton->setIconSize(QSize(40,40));
 
-
+    ui->gameMenuLabel->setText(tr("Game Menu"));
+    ui->StartDefGame_button->setText(tr("Word Definition"));
+    ui->StartSynGame_button->setText(tr("Find the Synonym"));
+    ui->quitButton->setText(tr("Quit"));
     ui->wordContainer_2->setText(tr("Which One: Choose the Definition"));
+    ui->wordContainer_51->setText(tr("Which One: Choose the Synonym"));
 
     // PickGame dialog
-    dictionaryGame();
 
+    foreach(QString str, langList){
+        qDebug() << str;
+    }
+
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 Games::~Games()
@@ -65,7 +74,7 @@ void Games::setUpDefinitionGame(){ //getPairSet("atiman", lang_index, "to take c
     score = 0;
     qDebug() << "Question: " << question << "score: " << score;
     ui->questionIndecatorLabel->setText(QString("%1 of 8").arg(question + 1));
-    liste = dbqe->getWordsSet(3, 8, "dummy_arg");
+    liste = dbqe->getWordsSet(ui->langComboBox->currentIndex() + 1, 8, "dummy_arg");
 
     portion = liste[question].split(" : ");
     ui->wordContainer->setText(portion[0]); // the word
@@ -75,19 +84,16 @@ void Games::setUpDefinitionGame(){ //getPairSet("atiman", lang_index, "to take c
 
 void Games::nextQuestion(){
     question++;
-    ui->questionIndecatorLabel->setText(QString("%1 of 8").arg(question +1));
-    if(question <= LASTQUESTION){
 
+    if(question <= LASTQUESTION){
+        ui->questionIndecatorLabel->setText(QString("%1 of 8").arg(question +1));
         portion = liste[question].split(" : ");
         ui->wordContainer->setText(portion[0]); // the word
         ui->pushButton_AnswerA->setText(portion[1]); // the definition
         ui->pushButton_AnswerB->setText(wrongAnswerPicker(liste, 0)); // gets a distractor
     } else {
-        QMessageBox::about(this, "VocabWidener",
-                           QString("Game is Done. Your score is %1").arg(score));
+        gameFinished();
     }
-
-    //qDebug() << "Question: " << question << " portion[0]: " << portion[0] << " portion[1]: " << portion[1];
 }
 
 void Games::answerChecker(QString ans, int question){
@@ -104,7 +110,8 @@ void Games::answerChecker(QString ans, int question){
 }
 
 void Games::gameFinished(){
-
+    QMessageBox::about(this, "VocabWidener",
+                       QString("Game is Done. Your score is %1").arg(score));
 }
 
 void Games::on_pushButton_AnswerA_clicked(){ // A
@@ -115,16 +122,6 @@ void Games::on_pushButton_AnswerA_clicked(){ // A
     }
 }
 
-/*QImage myImage;
-         myImage.load(":/prog_icons/icons/accept.png");
-         QImage myImage2;
-          myImage2.load(":/prog_icons/icons/cross.png");
-        if(answerChecker(answer, question) == true){
-            ui->answerIndecator->setPixmap(QPixmap::fromImage(myImage));
-        } else {
-            ui->answerIndecator->setPixmap(QPixmap::fromImage(myImage2));
-        }*/
-
 void Games::on_pushButton_AnswerB_clicked(){ // B
     if(question <= LASTQUESTION ){
         answer = ui->pushButton_AnswerB->text();
@@ -133,17 +130,84 @@ void Games::on_pushButton_AnswerB_clicked(){ // B
     }
 }
 
-void Games::dictionaryGame(){
-    setUpDefinitionGame();
-}
-
-void Games::thesaurusGame(){
-    //ui->stackedWidget->hide();
-}
-
 void Games::on_soundButton_clicked(){
     // Play the sound of the word/ image
     qDebug() << "SOUND";
 }
 
+void Games::on_StartDefGame_button_clicked(){
+    setUpDefinitionGame();
+    ui->stackedWidget->setCurrentIndex(1);
+}
 
+void Games::on_StartSynGame_button_clicked(){
+    setupSynonymGame();
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
+void Games::on_quitButton_clicked(){
+    close();
+}
+
+/*  QImage myImage;
+    myImage.load(":/prog_icons/icons/accept.png");
+    QImage myImage2;
+    myImage2.load(":/prog_icons/icons/cross.png");
+    if(answerChecker(answer, question) == true){
+        ui->answerIndecator->setPixmap(QPixmap::fromImage(myImage));
+    } else {
+        ui->answerIndecator->setPixmap(QPixmap::fromImage(myImage2));
+    }
+
+void Games::dictionaryGame(){
+    // go to Defination game Page
+    setUpDefinitionGame();
+}
+
+void Games::thesaurusGame(){
+    // go to Synonym game Page
+    setUpSynonymGame();
+}   */
+
+void Games::setupSynonymGame(){ //getPairSet("atiman", lang_index, "to take care of self", "a-ti-man");
+    question = 0;
+    score = 0;
+    qDebug() << "Question: " << question << "score: " << score;
+    ui->questionIndecatorLabel_3->setText(QString("%1 of 8").arg(question + 1));
+    liste = dbqe->getSynSet(ui->langComboBox->currentIndex() + 1, 8);
+
+    portion = liste[question].split(" : ");
+    ui->wordContainer->setText(portion[0]); // the word
+    ui->pushButton_AnswerA_26->setText(portion[1]); // the definition
+    ui->pushButton_AnswerB_26->setText(wrongAnswerPicker(liste, 0)); // gets a distractor
+}
+
+void Games::nextSynQuestion(){
+    question++;
+
+    if(question <= LASTQUESTION){
+        ui->questionIndecatorLabel->setText(QString("%1 of 8").arg(question +1));
+        portion = liste[question].split(" : ");
+        ui->wordContainer->setText(portion[0]); // the word
+        ui->pushButton_AnswerA_26->setText(portion[1]); // the definition
+        ui->pushButton_AnswerB_26->setText(wrongAnswerPicker(liste, 0)); // gets a distractor
+    } else {
+        gameFinished();
+    }
+}
+
+void Games::on_pushButton_AnswerA_26_clicked(){ // Synonym Answer button A
+    if(question <= LASTQUESTION ){
+        answer = ui->pushButton_AnswerA_26->text();
+        answerChecker(answer, question);
+        nextSynQuestion();
+    }
+}
+
+void Games::on_pushButton_AnswerB_26_clicked(){ // Synonym Answer button B
+    if(question <= LASTQUESTION ){
+        answer = ui->pushButton_AnswerB_26->text();
+        answerChecker(answer, question);
+        nextSynQuestion();
+    }
+}

@@ -18,7 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     this->setWindowTitle("VocabWidener");
-
+    translator.load("spa_translatione");
+    qApp->installTranslator(&translator);
+    retranslate();
 
     //this->setStyleSheet("background-color: green");
     buttonClicked = 1;
@@ -27,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->thesaurus_Button->setStyleSheet("background-color: gray");
 
     stringListModel = new QStringListModel(this);
-    QStringList languageList;
     languageList << "Spanish" << "Irish"  << "Cebuano";
 
     stringListModel->setStringList(languageList);
@@ -37,9 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     ui->lineEditL->setText("Search");
     //connect(ui->lookUpButton,SIGNAL(clicked()), this,SLOT(on_lookUpButton_clicked()));
-
     //ui->frame->setStyleSheet("border: 5px solid black" );
-
     /*Login *log = new Login(this);
     log->show();*/
 }
@@ -81,7 +80,7 @@ void MainWindow::on_games_Button_clicked(){
     ui->dictionary_Button->setStyleSheet("background-color: gray");
     ui->thesaurus_Button->setStyleSheet("background-color: gray");
 
-    Games game(this);
+    Games game(languageList, this);
     game.setModal(true);
     game.exec();
 }
@@ -126,21 +125,45 @@ void MainWindow::on_actionNew_Language_triggered(){ // New Language
 
 void MainWindow::on_actionAbout_triggered(){
     QMessageBox::about(this, "VocabWidener",
-                       "This program will help you to enrich your Vocabulary. The Dictionary tab allows you to search definitions of words. The Thesaurus finds synonyms of a word you enter. The Games tests your vocabulary.");
-}
-
-void MainWindow::on_actionSpanish_triggered(){
-    ui->statusBar->showMessage("Interface language Changed to Spanish",2000);
-}
-
-void MainWindow::on_actionCebuano_triggered(){
-    ui->statusBar->showMessage("Interface language Changed to Cebuano",2000);
-}
-
-void MainWindow::on_actionIrish_triggered(){
-    ui->statusBar->showMessage("Interface language Changed to Irish",2000);
+                       tr("This program will help you to enrich your Vocabulary. The Dictionary tab allows you to search definitions of words. The Thesaurus finds synonyms of a word you enter. The Games tests your vocabulary."));
 }
 
 void MainWindow::on_actionExit_triggered(){
     QApplication::quit();   // EXIT
 }
+
+
+/*
+ * Functions related to changing the language of the UI
+*/
+void MainWindow::changeEvent(QEvent* event){
+   if (event->type() == QEvent::LanguageChange){
+       ui->retranslateUi(this);
+       retranslate();
+   }
+
+   QMainWindow::changeEvent(event); // remember to call base class implementation
+}
+
+void MainWindow::on_actionSpanish_triggered(){
+    ui->statusBar->showMessage(tr("Interface language Changed to Spanish"),2000);
+    translator.load("spa_translatione");
+    qApp->installTranslator(&translator);
+}
+
+void MainWindow::on_actionCebuano_triggered(){
+    ui->statusBar->showMessage(tr("Interface language Changed to Cebuano"),2000);
+    translator.load("ceb_translatione");
+    qApp->installTranslator(&translator);
+}
+
+void MainWindow::on_actionIrish_triggered(){
+    ui->statusBar->showMessage(tr("Interface language Changed to Irish"),2000);
+    translator.load("gle_translatione");
+    qApp->installTranslator(&translator);
+}
+
+void MainWindow::retranslate(){
+    //ui->pushButton->setText(tr("PushButton"));
+}
+

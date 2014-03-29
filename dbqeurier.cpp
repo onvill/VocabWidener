@@ -100,7 +100,6 @@ QStringList DBQeurier::getSynonyms(int lang_id, QString word){
 
     qStm = QString("SELECT synonyms FROM synonyms INNER JOIN word ON synonyms.word = word.word WHERE word.language_id = %1 AND synonyms.word = '%2'").arg(lang_id).arg(word.toLower());
     QSqlQuery query(qStm,db);
-    //synonyms.clear();
     qDebug() << lang_id << "    " << word;
     while(query.next()){
         output = query.value(0).toString();
@@ -141,7 +140,6 @@ bool DBQeurier::addNewLanguage(int lang_id, QString language, QString iso_code){
 QStringList DBQeurier::getWordsSet(int lang_id, int level, QString game){
     qStm = QString("SELECT word, definition FROM word WHERE language_id = %1 LIMIT %2").arg(lang_id).arg(level); //ORDER BY RAND() LIMIT 15
     QSqlQuery query(qStm,db);
-    QStringList pairSet;
     while(query.next()){
         // word and the definition or synonyms
         output = query.value(0).toString() + " : " +  query.value(1).toString();
@@ -151,6 +149,26 @@ QStringList DBQeurier::getWordsSet(int lang_id, int level, QString game){
 
     return pairSet;
 }
+
+QStringList DBQeurier::getSynSet(int lang_id, int level){
+    qStm = QString("SELECT word, definition FROM word WHERE language_id = %1 LIMIT %2").arg(lang_id).arg(level); //ORDER BY RAND() LIMIT 15
+   //SELECT synonyms FROM synonyms INNER JOIN word ON synonyms.word = word.word WHERE word.language_id = %1 AND synonyms.word = '%2'").arg(lang_id).arg(word.toLower());
+    QSqlQuery query(qStm,db);
+    QStringList synonyms;
+    while(query.next()){
+        output = query.value(0).toString() + " : " +  query.value(1).toString();
+        pairSet << output;
+        //qDebug() << "Got Here,,, Invokedd" << output;
+    }
+
+    while(query.next()){
+        output = query.value(0).toString();
+    }
+    synonyms = output.split("|");
+
+    return pairSet;
+}
+
 
 int DBQeurier::login(QString username, QString password){
     int count = 0;

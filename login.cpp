@@ -13,7 +13,7 @@ Login::Login(QWidget *parent) :
     ui->label_2->setText(tr("Username"));
     ui->label_3->setText(tr("Password"));
     ui->pushButton_login->setText(tr("Login"));
-    ui->pushButton_login->setText(tr("Abort"));
+    ui->pushButton_login->setText(tr("Cancel"));
 }
 
 Login::~Login()
