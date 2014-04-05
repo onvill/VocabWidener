@@ -113,7 +113,7 @@ void MainWindow::on_lookUpButton_clicked(){ // Lookup
         synonyms.clear();
     }
 
-    dbqe->addEntry("atiman", lang_index, "to take care of self", "a-ti-man");
+    //dbqe->addEntry("atiman", lang_index, "to take care of self", "a-ti-man");
     //dbqe->updateDefinition("cebuano","itom", "black");
 }
 

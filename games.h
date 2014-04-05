@@ -30,27 +30,31 @@ private slots:
 private:
     Ui::Games *ui;
     int score;
+    int gamePlayed;
     bool m_buttonPressed;
     int question;
     QStringList liste;
     QStringList portion;
     QString answer;
+    QString ansOrBoggy;
+    QString ansOrBoggy2;
     QTimer *timer;
     DBQeurier *dbqe;
 
     void setUpDefinitionGame();
     int randomInt();
+    int randomAorB();
+    int randomInte(int ansListLegth);
     QString wrongAnswerPicker(QStringList list, int i);
     QStringList definitionSet;
     QStringList synonymSet;
-    //void dictionaryGame();
-    //void thesaurusGame();
     void answerChecker(QString ans, int q);
     void nextQuestion();
     void gameFinished();
 
     void setupSynonymGame();
     void nextSynQuestion();
+    QString answerChoper(QString ans);
 
 };
 

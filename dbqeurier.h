@@ -24,7 +24,7 @@ public:
     void addSynEntry(QString word, QString syn);
 
     //Games methods
-    QStringList getWordsSet(int lang_id, int level, QString game);
+    QStringList getWordsSet(int lang_id, int level);
     QStringList getSynSet(int lang_id, int level);
 
     //Login
@@ -40,6 +40,7 @@ private:
     QSqlDatabase db;
     QString output;
     QStringList pairSet;
+    QStringList synonyms;
     // QSqlQuery *query;
 };
 
