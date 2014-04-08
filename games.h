@@ -4,6 +4,7 @@
 #include <QDialog>
 #include "dbqeurier.h"
 #define LASTQUESTION 7
+#define INCREMENTLEVELBY 8
 
 namespace Ui {
 class Games;
@@ -33,6 +34,7 @@ private:
     int gamePlayed;
     bool m_buttonPressed;
     int question;
+    int level;
     QStringList liste;
     QStringList portion;
     QString answer;

@@ -39,6 +39,7 @@ Games::Games(const QStringList& langList, QWidget *parent) :
 
     // PickGame dialog
     ui->stackedWidget->setCurrentIndex(0);
+    level = INCREMENTLEVELBY;
 }
 
 Games::~Games(){
@@ -60,11 +61,12 @@ int Games::randomInt(){
 void Games::setUpDefinitionGame(){ //getPairSet("atiman", lang_index, "to take care of self", "a-ti-man");
     ui->stackedWidget->setCurrentIndex(1);
     question = 0;
+    qDebug() << "LEVELLLLLLLLLLLLLLLLLLL: " << level;
     score = 0;
     gamePlayed = 1;
     qDebug() << "Question: " << question << "score: " << score;
     ui->questionIndecatorLabel->setText(QString("%1 of 8").arg(question + 1));
-    liste = dbqe->getWordsSet(ui->langComboBox->currentIndex() + 1, 8);
+    liste = dbqe->getWordsSet(ui->langComboBox->currentIndex() + 1, level);
 
     portion = liste[question].split(" : ");
     ui->wordContainer->setText(portion[0]); // the word
@@ -109,13 +111,16 @@ void Games::gameFinished(){
                        QString("Game is Done. Your score is %1\nContinue to playing this Game?").arg(score),
                                   QMessageBox::Yes | QMessageBox::No);
     if(reply == QMessageBox::Yes){
+        level += INCREMENTLEVELBY;
         if(gamePlayed == 1){
             setUpDefinitionGame();
         }
         if(gamePlayed == 2){
             setupSynonymGame();
         }
+        // show Level indicatior then disappear.
     } else {
+        level = INCREMENTLEVELBY;
         ui->stackedWidget->setCurrentIndex(0);
     }
 }
@@ -141,7 +146,7 @@ void Games::on_soundButton_clicked(){
     qDebug() << "SOUND";
 }
 
-/* These buttons are in the Game Menu
+/* These buttons(3) are in the Game Menu
 */
 void Games::on_StartDefGame_button_clicked(){
     setUpDefinitionGame();
@@ -177,7 +182,6 @@ void Games::thesaurusGame(){
 
 /* Choses random(not the answer to the current question) at the query set
 */
-
 QString Games::wrongAnswerPicker(QStringList list, int i){ //index i is the correct answer
     int wrongIndex = i;
 
@@ -207,13 +211,10 @@ void Games::setupSynonymGame(){ //getPairSet("atiman", lang_index, "to take care
     question = 0;
     score = 0;
     gamePlayed = 2;
+    qDebug() << "LEVELLLLLLLLLLLLLLLLLLL: " << level;
     qDebug() << "Question: " << question << "score: " << score;
     ui->questionIndecatorLabel_3->setText(QString("%1 of 8").arg(question + 1));
-    liste = dbqe->getSynSet(ui->langComboBox->currentIndex() + 1, 8); // gets the Set
-
-    foreach(QString str, liste){
-        qDebug() << str;
-    }
+    liste = dbqe->getSynSet(ui->langComboBox->currentIndex() + 1, level); // gets the Set
 
     portion = liste[question].split(" : ");
     ui->wordContainer_50->setText(portion[0]); // Question
@@ -230,11 +231,13 @@ void Games::setupSynonymGame(){ //getPairSet("atiman", lang_index, "to take care
 }
 
 int Games::randomInte(int ansListLegth){
-    //qrand() % ((high + 1) - low) + low;
     int hello = (qrand() % ((ansListLegth + 1) - 0) + 0);
     return hello;
 }
 
+/* This function solves the issue of syn|syn2|syn3 ,
+ * showing up on the buttons
+*/
 QString Games::answerChoper(QString ans){
     QStringList answers = ans.split("|");
     qDebug() << answers.length();
@@ -284,6 +287,5 @@ void Games::on_pushButton_AnswerB_26_clicked(){ // Synonym Answer button B
 }
 
 /* Things Left for Games:
- *   - More Levels
- *   - picture and Sound for thte dictionary game
+ *   - picture and Sound for the dictionary game
 */

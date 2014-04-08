@@ -167,3 +167,15 @@ void MainWindow::retranslate(){
     //ui->pushButton->setText(tr("PushButton"));
 }
 
+// QStringList fileNames = QFileDialog::getOpenFileNames(this, tr("Open File"),"/path/to/file/",tr("Mp3 Files (*.mp3)"));
+/*myImage = new QLabel();
+
+// If your image is inside "images" folder then try  ":/images/imgfromresource.jpg".
+
+    QImage image(":/imgfromresource.jpg");
+    if(image.isNull()){
+        // error loading image, show an error message here
+    }
+    myImage->setPixmap(QPixmap::fromImage(image));
+
+*/
