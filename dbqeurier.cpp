@@ -175,6 +175,44 @@ QStringList DBQeurier::getSynSet(int lang_id, int level){
     return synonyms;
 }
 
+QByteArray DBQeurier::getSoundOrPicBytes(QString word, QString fileType){
+    byteArray.clear();
+    qStm = QString("SELECT %1 FROM word WHERE word = '%2'").arg(fileType).arg(word);
+    QSqlQuery query(qStm,db);
+    query.next();
+    byteArray = query.value(0).toByteArray();
+
+    query.finish();
+    return byteArray;
+}
+
+void DBQeurier::storePic(QByteArray pByte){
+    /*QFile fileIn ("Beeth.wma");
+    if (fileIn.open (QIODevice::ReadOnly))
+    {
+    QByteArray wBData(fileIn.readAll());
+    QString DocData.append(wBData);
+    }
+    then insert into Tab(....)values(...Docdata);
+
+    QImage image("flower.jpg");
+    qDebug() << image.size();
+    QByteArray byteArray;
+    QBuffer buffer(&byteArray);
+    buffer.open(QIODevice::WriteOnly);
+    image.save(&buffer, "jpg");
+
+    query.prepare("INSERT INTO pictures (id, pic) VALUES (?, ?)");
+    query.addBindValue(1);
+    query.addBindValue(byteArray);
+    qDebug() << query.exec();*/
+}
+
+void DBQeurier::storeSound(QByteArray pByte){
+
+}
+
+
 int DBQeurier::login(QString username, QString password){
     int count = 0;
     qStm = QString("SELECT * FROM teacher WHERE username = '%1'  AND password = '%2' ").arg(username).arg(password);

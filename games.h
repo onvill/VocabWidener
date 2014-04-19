@@ -3,6 +3,11 @@
 
 #include <QDialog>
 #include "dbqeurier.h"
+#include "qsound.h"
+#include <QByteArray>
+#include <QBuffer>
+#include <QtMultimedia>
+#include <QAudioOutput>
 #define LASTQUESTION 7
 #define INCREMENTLEVELBY 8
 
@@ -28,6 +33,10 @@ private slots:
     void on_pushButton_AnswerA_26_clicked();
     void on_pushButton_AnswerB_26_clicked();
 
+    void on_exitSynGameButton_clicked();
+
+    void on_exitDefGameButton_clicked();
+
 private:
     Ui::Games *ui;
     int score;
@@ -38,10 +47,11 @@ private:
     QStringList liste;
     QStringList portion;
     QString answer;
+    QString wordSound;
     QString ansOrBoggy;
     QString ansOrBoggy2;
-    QTimer *timer;
     DBQeurier *dbqe;
+    QPixmap pixmap;
 
     void setUpDefinitionGame();
     int randomInt();

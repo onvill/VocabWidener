@@ -8,7 +8,8 @@ QT += core gui\
             widgets
 QT += sql
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia
 
 TARGET = VocabWidener
 TEMPLATE = app
@@ -37,3 +38,5 @@ RESOURCES += \
     languagesIcons.qrc \
     icons.qrc \
     translation_files.qrc
+
+

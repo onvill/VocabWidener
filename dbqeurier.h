@@ -16,6 +16,9 @@ public:
     void updateDefinition(int lang_id, QString word, QString newDef);
     void addEntry(QString word, int lang_id, QString def, QString pronun);
     void newlanguage();
+    QByteArray getSoundOrPicBytes(QString word, QString fileType);
+    void storePic(QByteArray pByte);
+    void storeSound(QByteArray sByte);
 
     //Thesaurus methods
     QStringList getSynonyms(int lang_id, QString word);
@@ -41,6 +44,8 @@ private:
     QString output;
     QStringList pairSet;
     QStringList synonyms;
+    QByteArray byteArray;
+
     // QSqlQuery *query;
 };
 

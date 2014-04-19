@@ -6,6 +6,8 @@
 #include <QMessageBox>
 #include <QGraphicsScene>
 #include <QStateMachine>
+#include <QFile>
+
 
 Games::Games(const QStringList& langList, QWidget *parent) :
     QDialog(parent),
@@ -15,11 +17,11 @@ Games::Games(const QStringList& langList, QWidget *parent) :
 
     this->setWindowTitle("Vocabulary Games");
     dbqe = DBQeurier::instance();
-    timer = new QTimer(this);
 
     ui->langComboBox->addItems(langList); // populate the comboBox
     ui->LangLabel->setText(tr("Language to Play"));
 
+    pixmap = QPixmap();
     QPixmap correct(":/prog_icons/icons/accept.png");
     QPixmap wrong(":/prog_icons/icons/cross.png");
     QIcon correctIcon(correct);
@@ -40,10 +42,36 @@ Games::Games(const QStringList& langList, QWidget *parent) :
     // PickGame dialog
     ui->stackedWidget->setCurrentIndex(0);
     level = INCREMENTLEVELBY;
+    wordSound = "";
+
+
+    /*QPushButton *button = new QPushButton ();
+    QIcon ButtonIcon(pixmap);
+    button->setIcon(ButtonIcon);
+    button->setIconSize(pixmap.rect().size());
+    button->show();*/
+
+    ui->picture->setScaledContents(true);
+    ui->exitSynGameButton->setText("Quit");
+    ui->exitDefGameButton->setText("Quit");
 }
 
 Games::~Games(){
     delete ui;
+}
+
+/* These buttons(3) are in the Game Menu
+*/
+void Games::on_StartDefGame_button_clicked(){
+    setUpDefinitionGame();
+}
+
+void Games::on_StartSynGame_button_clicked(){
+    setupSynonymGame();
+}
+
+void Games::on_quitButton_clicked(){
+    close();
 }
 
 int Games::randomAorB(){
@@ -59,17 +87,22 @@ int Games::randomInt(){
 
 // when invoking getPairSet(language, game),,,, 2nd arg is either "definition" or "synonyms"
 void Games::setUpDefinitionGame(){ //getPairSet("atiman", lang_index, "to take care of self", "a-ti-man");
+    ui->picture->clear();
     ui->stackedWidget->setCurrentIndex(1);
     question = 0;
-    qDebug() << "LEVELLLLLLLLLLLLLLLLLLL: " << level;
     score = 0;
     gamePlayed = 1;
-    qDebug() << "Question: " << question << "score: " << score;
-    ui->questionIndecatorLabel->setText(QString("%1 of 8").arg(question + 1));
+    ui->questionIndecatorLabel->setText(QString("%1 / 8").arg(question + 1));
+    ui->progressBar_Def->setValue((question + 1) * 12.5);
     liste = dbqe->getWordsSet(ui->langComboBox->currentIndex() + 1, level);
 
     portion = liste[question].split(" : ");
+    wordSound = portion[0];
     ui->wordContainer->setText(portion[0]); // the word
+
+    pixmap.loadFromData(dbqe->getSoundOrPicBytes(portion[0], "image"));
+    ui->picture->setPixmap(pixmap);
+
 
     if(randomAorB() == 1){
         ansOrBoggy = portion[1];
@@ -86,9 +119,16 @@ void Games::nextQuestion(){
     question++;
 
     if(question <= LASTQUESTION){
-        ui->questionIndecatorLabel->setText(QString("%1 of 8").arg(question +1));
+        ui->questionIndecatorLabel->setText(QString("%1 / 8").arg(question +1));
+        ui->progressBar_Def->setValue((question + 1) * 12.5);
         portion = liste[question].split(" : ");
+        wordSound = portion[0];
         ui->wordContainer->setText(portion[0]); // the word
+
+        /*Picture*/
+        ui->picture->clear();
+        pixmap.loadFromData(dbqe->getSoundOrPicBytes(portion[0], "image"));
+        ui->picture->setPixmap(pixmap);
 
         if(randomAorB() == 1){
             ansOrBoggy = portion[1];
@@ -108,7 +148,7 @@ void Games::gameFinished(){
     liste.clear();
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "VocabWidener",
-                       QString("Game is Done. Your score is %1\nContinue to playing this Game?").arg(score),
+                       QString("Game is Done. Your score is %1\n Continue playing this Game?").arg(score),
                                   QMessageBox::Yes | QMessageBox::No);
     if(reply == QMessageBox::Yes){
         level += INCREMENTLEVELBY;
@@ -123,6 +163,7 @@ void Games::gameFinished(){
         level = INCREMENTLEVELBY;
         ui->stackedWidget->setCurrentIndex(0);
     }
+
 }
 
 void Games::on_pushButton_AnswerA_clicked(){ // A
@@ -141,23 +182,23 @@ void Games::on_pushButton_AnswerB_clicked(){ // B
     }
 }
 
-void Games::on_soundButton_clicked(){
-    // Play the sound of the word/ image
-    qDebug() << "SOUND";
-}
-
-/* These buttons(3) are in the Game Menu
+/* Play the sound of the word. The current word in question is queried
+ * from the database. An array of the sound is returned, this is then
+ * writen to a sound file; wav format. The sound file is then played.
 */
-void Games::on_StartDefGame_button_clicked(){
-    setUpDefinitionGame();
+void Games::on_soundButton_clicked(){
+    QByteArray array = dbqe->getSoundOrPicBytes(wordSound, "sound");
+    QFile file(QString("sounds/%1.wav").arg(wordSound));
+    file.open(QIODevice::WriteOnly);
+    file.write(array);
+    file.close();
+    
+    QSound::play(QString("sounds/%1.wav").arg(wordSound));
 }
 
-void Games::on_StartSynGame_button_clicked(){
-    setupSynonymGame();
-}
-
-void Games::on_quitButton_clicked(){
-    close();
+void Games::on_exitDefGameButton_clicked(){
+    level = INCREMENTLEVELBY;
+    ui->stackedWidget->setCurrentIndex(0);
 }
 
 /*  QImage myImage;
@@ -213,7 +254,8 @@ void Games::setupSynonymGame(){ //getPairSet("atiman", lang_index, "to take care
     gamePlayed = 2;
     qDebug() << "LEVELLLLLLLLLLLLLLLLLLL: " << level;
     qDebug() << "Question: " << question << "score: " << score;
-    ui->questionIndecatorLabel_3->setText(QString("%1 of 8").arg(question + 1));
+    ui->questionIndecatorLabel_3->setText(QString("%1 / 8").arg(question + 1));
+    ui->progressBar_Syn->setValue((question + 1) * 12.5);
     liste = dbqe->getSynSet(ui->langComboBox->currentIndex() + 1, level); // gets the Set
 
     portion = liste[question].split(" : ");
@@ -252,7 +294,8 @@ void Games::nextSynQuestion(){
     question++;
 
     if(question <= LASTQUESTION){
-        ui->questionIndecatorLabel_3->setText(QString("%1 of 8").arg(question +1));
+        ui->questionIndecatorLabel_3->setText(QString("%1 / 8").arg(question +1));
+        ui->progressBar_Syn->setValue((question + 1) * 12.5);
         portion = liste[question].split(" : ");
         ui->wordContainer_50->setText(portion[0]); // the Question
 
@@ -286,6 +329,7 @@ void Games::on_pushButton_AnswerB_26_clicked(){ // Synonym Answer button B
     }
 }
 
-/* Things Left for Games:
- *   - picture and Sound for the dictionary game
-*/
+void Games::on_exitSynGameButton_clicked(){
+    level = INCREMENTLEVELBY;
+    ui->stackedWidget->setCurrentIndex(0);
+}

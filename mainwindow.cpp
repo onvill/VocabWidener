@@ -11,16 +11,20 @@
 #include "games.h"
 #include <QPalette>
 #include "login.h"
+#include <QShortcut>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    this->move(550,300);
     this->setWindowTitle("VocabWidener");
     translator.load("spa_translatione");
     qApp->installTranslator(&translator);
     retranslate();
+
+    dbqe = DBQeurier::instance();
 
     //this->setStyleSheet("background-color: green");
     buttonClicked = 1;
@@ -34,9 +38,13 @@ MainWindow::MainWindow(QWidget *parent) :
     stringListModel->setStringList(languageList);
     ui->comboBox->setModel(stringListModel);
 
-    dbqe = DBQeurier::instance();
+
+    QShortcut *returnShortcut = new QShortcut(QKeySequence("Return"), this);
+    QObject::connect(returnShortcut, SIGNAL(activated()), ui->lookUpButton, SLOT(click()));
 
     ui->lineEditL->setText("Search");
+    QFont f( "MV Boli", 12, QFont::Bold);
+    ui->textEdit->setFont(f);
     //connect(ui->lookUpButton,SIGNAL(clicked()), this,SLOT(on_lookUpButton_clicked()));
     //ui->frame->setStyleSheet("border: 5px solid black" );
     /*Login *log = new Login(this);
@@ -50,15 +58,16 @@ MainWindow::~MainWindow(){
 //      DICTIONARY
 void MainWindow::on_dictionary_Button_clicked(){
     qDebug() << "DICTIONARY";
-    int lang_index = ui->comboBox->currentIndex() + 1;
+    //int lang_index = ui->comboBox->currentIndex() + 1;
     //dbqe->updateDefinition(lang_index, "ako", "me");
 
     buttonClicked = 1;
     ui->dictionary_Button->setStyleSheet("background-color: white");
     ui->games_Button->setStyleSheet("background-color: gray");
     ui->thesaurus_Button->setStyleSheet("background-color: gray");
-    Login *log = new Login(this);
-    log->show();
+
+    /*Login *log = new Login(this);
+    log->show();*/
 }
 
 //      THESAURUS
@@ -81,8 +90,10 @@ void MainWindow::on_games_Button_clicked(){
     ui->thesaurus_Button->setStyleSheet("background-color: gray");
 
     Games game(languageList, this);
+    game.move(550,300);
     game.setModal(true);
     game.exec();
+    on_dictionary_Button_clicked();
 }
 
 void MainWindow::on_lookUpButton_clicked(){ // Lookup
@@ -93,12 +104,12 @@ void MainWindow::on_lookUpButton_clicked(){ // Lookup
 
     if(buttonClicked == 1){// Dictionary
         definition = dbqe->getDefinition(lang_index, word);
-        textToShow = QString("Word: %1 \n\n Definition: %2").arg(word).arg(definition);
+        textToShow = QString("Word: \t%1 \n\nDefinition: \n\t%2").arg(word).arg(definition);
         ui->textEdit->append(textToShow);
     }
 
     if(buttonClicked == 2){ // Thesaurus
-        textToShow = QString("Word: %1 \n\n").arg(word);
+        textToShow = QString("Word: \t%1 \n").arg(word);
         ui->textEdit->append(textToShow);
         textToShow = QString("Synonyms: ");
         ui->textEdit->append(textToShow);
@@ -106,7 +117,7 @@ void MainWindow::on_lookUpButton_clicked(){ // Lookup
         QStringList synonyms = dbqe->getSynonyms(lang_index, word);
         textToShow = "";
         foreach(QString str, synonyms){
-            textToShow = QString(textToShow + "%1 \n").arg(str);
+            textToShow = QString(textToShow + "\t%1 \n").arg(str);
         }
 
         ui->textEdit->append(textToShow);
