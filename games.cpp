@@ -15,7 +15,7 @@ Games::Games(const QStringList& langList, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->setWindowTitle("Vocabulary Games");
+    this->setWindowTitle(tr("Vocabulary Games"));
     dbqe = DBQeurier::instance();
 
     ui->langComboBox->addItems(langList); // populate the comboBox
@@ -52,8 +52,10 @@ Games::Games(const QStringList& langList, QWidget *parent) :
     button->show();*/
 
     ui->picture->setScaledContents(true);
-    ui->exitSynGameButton->setText("Quit");
-    ui->exitDefGameButton->setText("Quit");
+    ui->exitSynGameButton->setText(tr("Quit"));
+    ui->exitDefGameButton->setText(tr("Quit"));
+    ui->answerIndecator->setText("");
+    ui->answerIndecator_3->setText("");
 }
 
 Games::~Games(){
@@ -148,7 +150,7 @@ void Games::gameFinished(){
     liste.clear();
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "VocabWidener",
-                       QString("Game is Done. Your score is %1\n Continue playing this Game?").arg(score),
+                       QString(tr("Game is Done. Your score is %1\nContinue playing this Game?")).arg(score),
                                   QMessageBox::Yes | QMessageBox::No);
     if(reply == QMessageBox::Yes){
         level += INCREMENTLEVELBY;

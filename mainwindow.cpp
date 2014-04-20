@@ -18,9 +18,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    this->move(550,300);
+    this->move(220,90);
     this->setWindowTitle("VocabWidener");
-    translator.load("spa_translatione");
+    translator.load("eng_translatione");
     qApp->installTranslator(&translator);
     retranslate();
 
@@ -78,7 +78,6 @@ void MainWindow::on_thesaurus_Button_clicked(){
     ui->games_Button->setStyleSheet("background-color: gray");
     qDebug() << "THESAURUS";
     //dbqe->associateWord("1234","dark");
-
 }
 
 //      GAMES GAMES GAMES
@@ -90,7 +89,7 @@ void MainWindow::on_games_Button_clicked(){
     ui->thesaurus_Button->setStyleSheet("background-color: gray");
 
     Games game(languageList, this);
-    game.move(550,300);
+    game.move(220, 90);
     game.setModal(true);
     game.exec();
     on_dictionary_Button_clicked();
@@ -174,6 +173,12 @@ void MainWindow::on_actionIrish_triggered(){
     qApp->installTranslator(&translator);
 }
 
+void MainWindow::on_actionEnglish_triggered(){
+    ui->statusBar->showMessage(tr("Interface language Changed to Irish"),2000);
+    translator.load("eng_translatione");
+    qApp->installTranslator(&translator);
+}
+
 void MainWindow::retranslate(){
     //ui->pushButton->setText(tr("PushButton"));
 }
@@ -190,3 +195,5 @@ void MainWindow::retranslate(){
     myImage->setPixmap(QPixmap::fromImage(image));
 
 */
+
+

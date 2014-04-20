@@ -21,7 +21,7 @@ SOURCES += main.cpp\
     games.cpp \
     login.cpp
 
-TRANSLATIONS += spa_translatione.ts gle_translatione.ts ceb_translatione.ts
+TRANSLATIONS += spa_translatione.ts gle_translatione.ts ceb_translatione.ts eng_translatione.ts
 
 HEADERS  += mainwindow.h \
     dbqeurier.h \

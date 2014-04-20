@@ -37,6 +37,8 @@ private slots:
     void on_thesaurus_Button_clicked();
     void on_lookUpButton_clicked();
 
+    void on_actionEnglish_triggered();
+
 protected slots:
     void changeEvent(QEvent* event);
 

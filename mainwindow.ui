@@ -1589,6 +1589,7 @@ p, li { white-space: pre-wrap; }
     <addaction name="actionSpanish"/>
     <addaction name="actionCebuano"/>
     <addaction name="actionIrish"/>
+    <addaction name="actionEnglish"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -1653,6 +1654,15 @@ p, li { white-space: pre-wrap; }
    </property>
    <property name="text">
     <string>New Language</string>
+   </property>
+  </action>
+  <action name="actionEnglish">
+   <property name="icon">
+    <iconset resource="languagesIcons.qrc">
+     <normaloff>:/languages/languages/UK.jpg</normaloff>:/languages/languages/UK.jpg</iconset>
+   </property>
+   <property name="text">
+    <string>English</string>
    </property>
   </action>
  </widget>
