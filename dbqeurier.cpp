@@ -43,7 +43,7 @@ QString DBQeurier::getDefinition(int lang_id, QString wordToFind){
 
 void DBQeurier::addEntry(QString word, int lang_id, QString def, QString pronun){
 
-    addSynEntry(word, "take care");
+    addSynEntry(word);
     //QString sQuery = "INSERT INTO test.people (id, first, last) VALUES(:id, :first, :last)";
     qStm = QString("INSERT INTO finalproject.word (word, language_id, definition, pronunciation) VALUES(:word, :lang_id, :definition, :pronunciation)");
     qDebug() << qStm;
@@ -75,6 +75,18 @@ void DBQeurier::addSynEntry(QString word, QString syn){
 
     if(query.exec()){
         qDebug() << "Synonym table appended";
+    }
+}
+
+void DBQeurier::addSynEntry(QString word){
+    qStm = QString("INSERT INTO finalproject.synonyms (word) VALUES(:word)");
+
+    QSqlQuery query;
+    query.prepare(qStm);
+    query.bindValue(":word", word);
+
+    if(query.exec()){
+        qDebug() << word << " is Added!";
     }
 }
 

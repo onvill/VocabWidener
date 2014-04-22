@@ -44,13 +44,6 @@ Games::Games(const QStringList& langList, QWidget *parent) :
     level = INCREMENTLEVELBY;
     wordSound = "";
 
-
-    /*QPushButton *button = new QPushButton ();
-    QIcon ButtonIcon(pixmap);
-    button->setIcon(ButtonIcon);
-    button->setIconSize(pixmap.rect().size());
-    button->show();*/
-
     ui->picture->setScaledContents(true);
     ui->exitSynGameButton->setText(tr("Quit"));
     ui->exitDefGameButton->setText(tr("Quit"));

@@ -30,7 +30,8 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     games.ui \
-    login.ui
+    login.ui \
+    AddWord.ui
 
 RC_FILE = myapp.rc
 

@@ -17,9 +17,11 @@ public:
     explicit Login(QWidget *parent = 0);
     ~Login();
 
+signals:
+   void updateGeneralStatusSignal();
+
 private slots:
     void on_pushButton_login_clicked();
-
     void on_pushButton_cancel_clicked();
 
 private:

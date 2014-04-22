@@ -25,6 +25,7 @@ public:
     void associateWord(QString word, QString wordToAdd);
     bool addNewLanguage(int lang_id, QString language, QString iso_code);
     void addSynEntry(QString word, QString syn);
+    void addSynEntry(QString word);
 
     //Games methods
     QStringList getWordsSet(int lang_id, int level);

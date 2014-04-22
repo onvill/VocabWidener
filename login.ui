@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>252</width>
-    <height>204</height>
+    <height>205</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
    <property name="title">
     <string>Signin</string>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget1">
     <property name="geometry">
      <rect>
       <x>12</x>
@@ -51,7 +51,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget2">
     <property name="geometry">
      <rect>
       <x>12</x>
@@ -73,7 +73,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget3">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -99,14 +99,6 @@
      </item>
     </layout>
    </widget>
-   <zorder>label_2</zorder>
-   <zorder>label_3</zorder>
-   <zorder>lineEdit_userName</zorder>
-   <zorder>lineEdit_password</zorder>
-   <zorder>label</zorder>
-   <zorder>pushButton_login</zorder>
-   <zorder>label</zorder>
-   <zorder>pushButton_cancel</zorder>
   </widget>
   <widget class="QLabel" name="label">
    <property name="geometry">

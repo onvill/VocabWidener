@@ -6,14 +6,14 @@ Login::Login(QWidget *parent) :
     ui(new Ui::Login)
 {
     ui->setupUi(this);
-    this->setWindowTitle("SignIn");
+    this->setWindowTitle(tr("SignIn"));
 
     db = DBQeurier::instance();
 
     ui->label_2->setText(tr("Username"));
     ui->label_3->setText(tr("Password"));
     ui->pushButton_login->setText(tr("Login"));
-    ui->pushButton_login->setText(tr("Cancel"));
+    ui->pushButton_cancel->setText(tr("Cancel"));
 }
 
 Login::~Login()
@@ -28,10 +28,12 @@ void Login::on_pushButton_login_clicked(){
 
     if(db->login(username, password) == 1){
         ui->label->setText("Login Credentials correct.");
+        //connect(this, SIGNAL(updateGeneralStatusSignal()), SIGNAL(updateGeneralStatusSignal()));
+        emit updateGeneralStatusSignal();
+        this->close();
     } else {
         ui->label->setText("Username or Password incorrect.");
     }
-
 }
 
 void Login::on_pushButton_cancel_clicked(){

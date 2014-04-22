@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QTranslator>
 #include "dbqeurier.h"
+#include <QLabel>
 
 
 namespace Ui {
@@ -31,13 +32,22 @@ private slots:
     void on_actionCebuano_triggered();
     void on_actionIrish_triggered();
     void on_actionExit_triggered();
-    void on_actionNew_Language_triggered();
     void on_dictionary_Button_clicked();
     void on_games_Button_clicked();
     void on_thesaurus_Button_clicked();
     void on_lookUpButton_clicked();
-
     void on_actionEnglish_triggered();
+    void on_offTeacherMode_clicked();
+    void on_actionTeacher_Login_triggered();
+    void logInSuccess();
+
+    void on_newLang_button_clicked();
+
+    void on_addWord_button_clicked();
+
+    void on_updateDef_button_clicked();
+
+    void on_addSyn_button_clicked();
 
 protected slots:
     void changeEvent(QEvent* event);
@@ -45,6 +55,7 @@ protected slots:
 private:
     int buttonClicked;
     QStringList languageList;
+    bool teacherMode;
     QTranslator translator;
 
     Ui::MainWindow *ui;

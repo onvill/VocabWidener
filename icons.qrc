@@ -9,5 +9,6 @@
         <file>icons/sound-volume.png</file>
         <file>icons/accept.png</file>
         <file>icons/cross.png</file>
+        <file>IconFarm/eye.png</file>
     </qresource>
 </RCC>
