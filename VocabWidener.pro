@@ -11,6 +11,7 @@ QT += sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets multimedia
 
+
 TARGET = VocabWidener
 TEMPLATE = app
 
@@ -19,19 +20,33 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     dbqeurier.cpp \
     games.cpp \
-    login.cpp
+    login.cpp \
+    addword.cpp \
+    newlanguage.cpp \
+    updatedefinition.cpp \
+    addsynonym.cpp \
+    fileexplorer.cpp
 
 TRANSLATIONS += spa_translatione.ts gle_translatione.ts ceb_translatione.ts eng_translatione.ts
 
 HEADERS  += mainwindow.h \
     dbqeurier.h \
     games.h \
-    login.h
+    login.h \
+    addword.h \
+    newlanguage.h \
+    updatedefinition.h \
+    addsynonym.h \
+    fileexplorer.h
 
 FORMS    += mainwindow.ui \
     games.ui \
     login.ui \
-    AddWord.ui
+    addword.ui \
+    newlanguage.ui \
+    updatedefinition.ui \
+    addsynonym.ui \
+    fileexplorer.ui
 
 RC_FILE = myapp.rc
 

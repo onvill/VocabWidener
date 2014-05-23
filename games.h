@@ -10,6 +10,7 @@
 #include <QAudioOutput>
 #define LASTQUESTION 7
 #define INCREMENTLEVELBY 8
+#define INCREMENTPROGRESS 12.5
 
 namespace Ui {
 class Games;
@@ -32,9 +33,7 @@ private slots:
     void on_quitButton_clicked();
     void on_pushButton_AnswerA_26_clicked();
     void on_pushButton_AnswerB_26_clicked();
-
     void on_exitSynGameButton_clicked();
-
     void on_exitDefGameButton_clicked();
 
 private:

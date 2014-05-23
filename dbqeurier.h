@@ -5,6 +5,7 @@
 #include <QtSql>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QtWidgets>
 
 class DBQeurier : public QMainWindow
 {
@@ -13,12 +14,10 @@ public:
 
     //Dictionary methods
     QString getDefinition(int lang_id, QString wordToFind);
+    QStringList getDictOutput(int lang_id, QString wordToFind);
     void updateDefinition(int lang_id, QString word, QString newDef);
-    void addEntry(QString word, int lang_id, QString def, QString pronun);
-    void newlanguage();
-    QByteArray getSoundOrPicBytes(QString word, QString fileType);
-    void storePic(QByteArray pByte);
-    void storeSound(QByteArray sByte);
+    void addEntry(QString word, int lang_id, QString def, QString pronun, QByteArray picByte, QByteArray soundByte);
+    void updateMediaFile(QString word);
 
     //Thesaurus methods
     QStringList getSynonyms(int lang_id, QString word);
@@ -30,24 +29,26 @@ public:
     //Games methods
     QStringList getWordsSet(int lang_id, int level);
     QStringList getSynSet(int lang_id, int level);
+    QByteArray getSoundOrPicBytes(QString word, QString fileType);
 
     //Login
     int login(QString username, QString password);
 
+    void newlanguage();
+    DBQeurier();
+    ~DBQeurier(){};
 
 private:
     static DBQeurier* m_instance;
-    DBQeurier();
-    ~DBQeurier(){};
 
     QString qStm;
     QSqlDatabase db;
     QString output;
     QStringList pairSet;
     QStringList synonyms;
+    QStringList dictOutput;
     QByteArray byteArray;
 
-    // QSqlQuery *query;
 };
 
 #endif // DBQEURIER_H

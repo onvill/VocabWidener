@@ -19,7 +19,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    //this->move(220,90);
+    this->move(250,50);
     this->setWindowTitle("VocabWidener");
     translator.load("eng_translatione");
     qApp->installTranslator(&translator);
@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     dbqe = DBQeurier::instance();
 
-    //this->setStyleSheet("background-color: green");
     buttonClicked = 1;
     teacherMode = false;
     ui->dictionary_Button->setStyleSheet("background-color: white");
@@ -46,7 +45,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
     /*    ---   LABELS   ---   */
-    QFont f( "MS Shell Dlg 2", 10, QFont::Bold);
+    QFont f("MS Shell Dlg 2", 10, QFont::Bold);
     ui->teacherOnly->setText(tr("Teacher Section"));
     ui->teacherModeLabel_2->setStyleSheet("QLabel {color : Red; font:bold 16px;}");
     ui->lineEditL->setText(tr("Search"));
@@ -59,33 +58,34 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->updateDef_button->setText(tr("Update Definition"));
     ui->addSyn_button->setText(tr("New Synonym"));
     ui->offTeacherMode->setText(tr("Stop Mode"));
-    /*ui->newLang_button->setEnabled(false);
+    ui->newLang_button->setEnabled(false);
     ui->addWord_button->setEnabled(false);
     ui->updateDef_button->setEnabled(false);
-    ui->addSyn_button->setEnabled(false);*/
+    ui->addSyn_button->setEnabled(false);
     ui->offTeacherMode->setEnabled(false);
 
-    ui->newLang_button->setEnabled(true);
+    /*ui->newLang_button->setEnabled(true);
     ui->addWord_button->setEnabled(true);
     ui->updateDef_button->setEnabled(true);
-    ui->addSyn_button->setEnabled(true);
+    ui->addSyn_button->setEnabled(true);*/
+    QPixmap soundIcon(":/prog_icons/icons/sound-volume.png");
+    QIcon ButtonIcon(soundIcon);
+    ui->soundButton->setIcon(ButtonIcon);
+    ui->soundButton->setIconSize(QSize(50,50));
 
     /*    ---   SHORCUTS   ---   */
     ui->actionTeacher_Login->setShortcut(tr("Ctrl+L"));
-    ui->actionExit->setShortcut(tr("Ctrl+X"));
-
-    //ui->toolBox->setEnabled(false);
+    ui->actionExit->setShortcut(tr("Ctrl+1"));
 }
 
 MainWindow::~MainWindow(){
     delete ui;
 }
 
-//      DICTIONARY
+/* DICTIONARY
+*/
 void MainWindow::on_dictionary_Button_clicked(){
     qDebug() << "DICTIONARY";
-    //int lang_index = ui->comboBox->currentIndex() + 1;
-    //dbqe->updateDefinition(lang_index, "ako", "me");
 
     buttonClicked = 1;
     ui->dictionary_Button->setStyleSheet("background-color: white");
@@ -93,7 +93,8 @@ void MainWindow::on_dictionary_Button_clicked(){
     ui->thesaurus_Button->setStyleSheet("background-color: gray");
 }
 
-//      THESAURUS
+/* THESAURUS
+*/
 void MainWindow::on_thesaurus_Button_clicked(){
     buttonClicked = 2;
     ui->thesaurus_Button->setStyleSheet("background-color: white");
@@ -103,7 +104,8 @@ void MainWindow::on_thesaurus_Button_clicked(){
     //dbqe->associateWord("1234","dark");
 }
 
-//      GAMES GAMES GAMES
+/* GAMES
+*/
 void MainWindow::on_games_Button_clicked(){
     qDebug() << "GAMESSS";
     buttonClicked = 3;
@@ -112,21 +114,24 @@ void MainWindow::on_games_Button_clicked(){
     ui->thesaurus_Button->setStyleSheet("background-color: gray");
 
     Games game(languageList, this);
-    //game.move(220, 90);
+    game.move(250, 50);
     game.setModal(true);
     game.exec();
     on_dictionary_Button_clicked();
 }
 
+/*
+*/
 void MainWindow::on_lookUpButton_clicked(){ // Lookup
     ui->textEdit->clear();
     int lang_index = ui->comboBox->currentIndex() + 1;
     QString word = ui->lineEditL->text();
-    QString definition, textToShow;
+    QString textToShow;
+    QStringList defAndPron;
 
     if(buttonClicked == 1){// Dictionary
-        definition = dbqe->getDefinition(lang_index, word);
-        textToShow = QString("Word: \t%1 \n\nDefinition: \n\t%2").arg(word).arg(definition);
+        defAndPron = dbqe->getDictOutput(lang_index, word);
+        textToShow = QString("Word: \t%1 \n\nDefinition: \n\t%2 \n\nPronunciation: \n\t%3").arg(word).arg(defAndPron[0]).arg(defAndPron[1]);
         ui->textEdit->append(textToShow);
     }
 
@@ -145,16 +150,18 @@ void MainWindow::on_lookUpButton_clicked(){ // Lookup
         ui->textEdit->append(textToShow);
         synonyms.clear();
     }
-
-    //dbqe->addEntry("atiman", lang_index, "to take care of self", "a-ti-man");
-    //dbqe->updateDefinition("cebuano","itom", "black");
+    wordSound = word;
 }
 
+/*
+*/
 void MainWindow::on_actionAbout_triggered(){
     QMessageBox::about(this, "VocabWidener",
                        tr("This program will help you to enrich your Vocabulary. The Dictionary tab allows you to search definitions of words. The Thesaurus finds synonyms of a word you enter. The Games tests your vocabulary."));
 }
 
+/*
+*/
 void MainWindow::on_actionExit_triggered(){
     QApplication::quit();   // EXIT
 }
@@ -171,30 +178,40 @@ void MainWindow::changeEvent(QEvent* event){
    QMainWindow::changeEvent(event); // remember to call base class implementation
 }
 
+/*
+*/
 void MainWindow::on_actionSpanish_triggered(){
     ui->statusBar->showMessage(tr("Interface language Changed to Spanish"),2000);
     translator.load("spa_translatione");
     qApp->installTranslator(&translator);
 }
 
+/*
+*/
 void MainWindow::on_actionCebuano_triggered(){
     ui->statusBar->showMessage(tr("Interface language Changed to Cebuano"),2000);
     translator.load("ceb_translatione");
     qApp->installTranslator(&translator);
 }
 
+/*
+*/
 void MainWindow::on_actionIrish_triggered(){
     ui->statusBar->showMessage(tr("Interface language Changed to Irish"),2000);
     translator.load("gle_translatione");
     qApp->installTranslator(&translator);
 }
 
+/*
+*/
 void MainWindow::on_actionEnglish_triggered(){
     ui->statusBar->showMessage(tr("Interface language Changed to English"),2000);
     translator.load("eng_translatione");
     qApp->installTranslator(&translator);
 }
 
+/*
+*/
 void MainWindow::retranslate(){
     ui->teacherOnly->setText(tr("Teacher\nSection"));
     if(teacherMode){
@@ -215,19 +232,20 @@ void MainWindow::retranslate(){
 
 */
 
+/*
+*/
 void MainWindow::on_actionTeacher_Login_triggered(){
-    /*Login *log = new Login(this);
-    log->show();*/
     Login login(this); //sarg 123
     login.setModal(true);
     connect(&login, SIGNAL(updateGeneralStatusSignal()), SLOT(logInSuccess()));
     login.exec();
 }
 
+/*
+*/
 void MainWindow::on_offTeacherMode_clicked(){
     ui->teacherModeLabel_2->setHidden(true);
     teacherMode = false;
-    //ui->teacherOnly->setText(tr("Teacher\nSection"));
     ui->newLang_button->setEnabled(false);
     ui->addWord_button->setEnabled(false);
     ui->updateDef_button->setEnabled(false);
@@ -235,6 +253,8 @@ void MainWindow::on_offTeacherMode_clicked(){
     ui->offTeacherMode->setEnabled(false);
 }
 
+/*
+*/
 void MainWindow::logInSuccess(){
     ui->teacherModeLabel_2->setHidden(false);
     teacherMode = true;
@@ -247,22 +267,54 @@ void MainWindow::logInSuccess(){
     ui->offTeacherMode->setEnabled(true);
 }
 
+/*
+*/
 void MainWindow::on_newLang_button_clicked(){
-    //dbqe->newlanguage(4, languageName, code);
-    /*AddWord *newWord = new AddWord();
-    newWord.show();*/
+    NewLanguage newLang(languageList, this);
+    newLang.setModal(true);
+    newLang.exec();
+    // update languageList
+    /*
+        languageList << "Spanish" << "Irish"  << "Cebuano" << ;
 
+        stringListModel->setStringList(languageList);
+        ui->comboBox->setModel(stringListModel);
+    */
 }
 
+/*
+*/
 void MainWindow::on_addWord_button_clicked(){
-    //dbqe->addEntry(word, id, definition, pronunciation);
-
+    AddWord newWord(languageList, this);
+    newWord.setModal(true);
+    newWord.exec();
 }
 
+/*
+*/
 void MainWindow::on_updateDef_button_clicked(){
-    //dbqe->getDefinition(id, word, new_def);
+    UpdateDefinition updateDef(languageList, this);
+    updateDef.setModal(true);
+    updateDef.exec();
 }
 
+/*
+*/
 void MainWindow::on_addSyn_button_clicked(){
-    //dbqe->associateWord(word, wordToAdd);
+    AddSynonym addSyn(this);
+    addSyn.setModal(true);
+    addSyn.exec();
+}
+
+/*
+*/
+void MainWindow::on_soundButton_clicked(){
+    QByteArray array = dbqe->getSoundOrPicBytes(wordSound, "sound");
+    QFile file(QString("sounds/%1.wav").arg(wordSound));
+    file.open(QIODevice::WriteOnly);
+    file.write(array);
+    file.close();
+
+    // Play the wav file
+    QSound::play(QString("sounds/%1.wav").arg(wordSound));
 }

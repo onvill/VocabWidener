@@ -1871,7 +1871,7 @@
           <widget class="QLineEdit" name="lineEditL">
            <property name="geometry">
             <rect>
-             <x>30</x>
+             <x>40</x>
              <y>40</y>
              <width>181</width>
              <height>31</height>
@@ -1895,7 +1895,7 @@
           <widget class="QPushButton" name="lookUpButton">
            <property name="geometry">
             <rect>
-             <x>215</x>
+             <x>230</x>
              <y>40</y>
              <width>131</width>
              <height>31</height>
@@ -1970,7 +1970,7 @@
           <widget class="QWidget" name="layoutWidget2">
            <property name="geometry">
             <rect>
-             <x>120</x>
+             <x>140</x>
              <y>220</y>
              <width>221</width>
              <height>131</height>
@@ -2010,7 +2010,7 @@
           <widget class="QPushButton" name="offTeacherMode">
            <property name="geometry">
             <rect>
-             <x>260</x>
+             <x>280</x>
              <y>370</y>
              <width>75</width>
              <height>31</height>
@@ -2443,6 +2443,19 @@
               </colorrole>
              </disabled>
             </palette>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+          <widget class="QPushButton" name="soundButton">
+           <property name="geometry">
+            <rect>
+             <x>310</x>
+             <y>140</y>
+             <width>50</width>
+             <height>50</height>
+            </rect>
            </property>
            <property name="text">
             <string/>

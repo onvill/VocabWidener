@@ -61,26 +61,35 @@ void Games::on_StartDefGame_button_clicked(){
     setUpDefinitionGame();
 }
 
+/*
+*/
 void Games::on_StartSynGame_button_clicked(){
     setupSynonymGame();
 }
 
+/*
+*/
 void Games::on_quitButton_clicked(){
     close();
 }
 
+/*
+*/
 int Games::randomAorB(){
     int rand = (qrand() % (2));
     return rand;
 }
 
+/*
+*/
 int Games::randomInt(){
     //qrand() % ((high + 1) - low) + low;
     int hello = (qrand() % (LASTQUESTION + 1));
     return hello;
 }
 
-// when invoking getPairSet(language, game),,,, 2nd arg is either "definition" or "synonyms"
+/* when invoking getPairSet(language, game),,,, 2nd arg is either "definition" or "synonyms"
+*/
 void Games::setUpDefinitionGame(){ //getPairSet("atiman", lang_index, "to take care of self", "a-ti-man");
     ui->picture->clear();
     ui->stackedWidget->setCurrentIndex(1);
@@ -88,7 +97,7 @@ void Games::setUpDefinitionGame(){ //getPairSet("atiman", lang_index, "to take c
     score = 0;
     gamePlayed = 1;
     ui->questionIndecatorLabel->setText(QString("%1 / 8").arg(question + 1));
-    ui->progressBar_Def->setValue((question + 1) * 12.5);
+    ui->progressBar_Def->setValue(question * INCREMENTPROGRESS);
     liste = dbqe->getWordsSet(ui->langComboBox->currentIndex() + 1, level);
 
     portion = liste[question].split(" : ");
@@ -97,7 +106,6 @@ void Games::setUpDefinitionGame(){ //getPairSet("atiman", lang_index, "to take c
 
     pixmap.loadFromData(dbqe->getSoundOrPicBytes(portion[0], "image"));
     ui->picture->setPixmap(pixmap);
-
 
     if(randomAorB() == 1){
         ansOrBoggy = portion[1];
@@ -110,12 +118,14 @@ void Games::setUpDefinitionGame(){ //getPairSet("atiman", lang_index, "to take c
     ui->pushButton_AnswerB->setText(ansOrBoggy2); // button B
 }
 
+/*
+*/
 void Games::nextQuestion(){
     question++;
 
     if(question <= LASTQUESTION){
         ui->questionIndecatorLabel->setText(QString("%1 / 8").arg(question +1));
-        ui->progressBar_Def->setValue((question + 1) * 12.5);
+        ui->progressBar_Def->setValue(question * INCREMENTPROGRESS);
         portion = liste[question].split(" : ");
         wordSound = portion[0];
         ui->wordContainer->setText(portion[0]); // the word
@@ -139,8 +149,12 @@ void Games::nextQuestion(){
     }
 }
 
+/*
+*/
 void Games::gameFinished(){
     liste.clear();
+    ui->progressBar_Def->setValue(100);
+    ui->progressBar_Syn->setValue(100);
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(this, "VocabWidener",
                        QString(tr("Game is Done. Your score is %1\nContinue playing this Game?")).arg(score),
@@ -161,6 +175,8 @@ void Games::gameFinished(){
 
 }
 
+/*
+*/
 void Games::on_pushButton_AnswerA_clicked(){ // A
     if(question <= LASTQUESTION ){
         answer = ui->pushButton_AnswerA->text();
@@ -169,6 +185,8 @@ void Games::on_pushButton_AnswerA_clicked(){ // A
     }
 }
 
+/*
+*/
 void Games::on_pushButton_AnswerB_clicked(){ // B
     if(question <= LASTQUESTION ){
         answer = ui->pushButton_AnswerB->text();
@@ -187,10 +205,13 @@ void Games::on_soundButton_clicked(){
     file.open(QIODevice::WriteOnly);
     file.write(array);
     file.close();
-    
+
+    // Play the wav file
     QSound::play(QString("sounds/%1.wav").arg(wordSound));
 }
 
+/*
+*/
 void Games::on_exitDefGameButton_clicked(){
     level = INCREMENTLEVELBY;
     ui->stackedWidget->setCurrentIndex(0);
@@ -205,16 +226,8 @@ void Games::on_exitDefGameButton_clicked(){
     } else {
         ui->answerIndecator->setPixmap(QPixmap::fromImage(myImage2));
     }
+*/
 
-void Games::dictionaryGame(){
-    // go to Defination game Page
-    setUpDefinitionGame();
-}
-
-void Games::thesaurusGame(){
-    // go to Synonym game Page
-    setUpSynonymGame();
-}   */
 
 /* Choses random(not the answer to the current question) at the query set
 */
@@ -229,6 +242,8 @@ QString Games::wrongAnswerPicker(QStringList list, int i){ //index i is the corr
     return wrongAnswer[1];
 }
 
+/*
+*/
 void Games::answerChecker(QString ans, int question){
     bool correct = liste[question].contains(ans);// see if the contents after ":" has the answer
     qDebug() << "The User Clicked: " << ans;
@@ -242,15 +257,17 @@ void Games::answerChecker(QString ans, int question){
     qDebug() << "Question no: " << question << " is " << correct;
 }
 
+/*
+*/
 void Games::setupSynonymGame(){ //getPairSet("atiman", lang_index, "to take care of self", "a-ti-man");
     ui->stackedWidget->setCurrentIndex(2);
     question = 0;
     score = 0;
     gamePlayed = 2;
-    qDebug() << "LEVELLLLLLLLLLLLLLLLLLL: " << level;
+    qDebug() << "LEVELLLLL: " << level;
     qDebug() << "Question: " << question << "score: " << score;
     ui->questionIndecatorLabel_3->setText(QString("%1 / 8").arg(question + 1));
-    ui->progressBar_Syn->setValue((question + 1) * 12.5);
+    ui->progressBar_Syn->setValue(question * INCREMENTPROGRESS);
     liste = dbqe->getSynSet(ui->langComboBox->currentIndex() + 1, level); // gets the Set
 
     portion = liste[question].split(" : ");
@@ -267,6 +284,8 @@ void Games::setupSynonymGame(){ //getPairSet("atiman", lang_index, "to take care
     ui->pushButton_AnswerB_26->setText(ansOrBoggy2); // Button B
 }
 
+/*
+*/
 int Games::randomInte(int ansListLegth){
     int hello = (qrand() % ((ansListLegth + 1) - 0) + 0);
     return hello;
@@ -285,12 +304,14 @@ QString Games::answerChoper(QString ans){
     }
 }
 
+/*
+*/
 void Games::nextSynQuestion(){
     question++;
 
     if(question <= LASTQUESTION){
         ui->questionIndecatorLabel_3->setText(QString("%1 / 8").arg(question +1));
-        ui->progressBar_Syn->setValue((question + 1) * 12.5);
+        ui->progressBar_Syn->setValue(question * INCREMENTPROGRESS);
         portion = liste[question].split(" : ");
         ui->wordContainer_50->setText(portion[0]); // the Question
 
@@ -308,6 +329,8 @@ void Games::nextSynQuestion(){
     }
 }
 
+/*
+*/
 void Games::on_pushButton_AnswerA_26_clicked(){ // Synonym Answer button A
     if(question <= LASTQUESTION ){
         answer = ui->pushButton_AnswerA_26->text();
@@ -316,6 +339,8 @@ void Games::on_pushButton_AnswerA_26_clicked(){ // Synonym Answer button A
     }
 }
 
+/*
+*/
 void Games::on_pushButton_AnswerB_26_clicked(){ // Synonym Answer button B
     if(question <= LASTQUESTION ){
         answer = ui->pushButton_AnswerB_26->text();
@@ -324,6 +349,8 @@ void Games::on_pushButton_AnswerB_26_clicked(){ // Synonym Answer button B
     }
 }
 
+/*
+*/
 void Games::on_exitSynGameButton_clicked(){
     level = INCREMENTLEVELBY;
     ui->stackedWidget->setCurrentIndex(0);

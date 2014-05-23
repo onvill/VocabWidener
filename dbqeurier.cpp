@@ -1,5 +1,4 @@
 #include "dbqeurier.h"
-#include <QtWidgets>
 #include <QDebug>
 
 DBQeurier::DBQeurier()
@@ -16,6 +15,8 @@ DBQeurier::DBQeurier()
 
 DBQeurier* DBQeurier::m_instance = NULL;
 
+/* Returns the instance of this class if its already instantiated
+*/
 DBQeurier* DBQeurier::instance()
 {
     if( !m_instance )
@@ -25,11 +26,12 @@ DBQeurier* DBQeurier::instance()
     return m_instance;
 }
 
-//Dictionary methods
+// *************** DICTIONARY FUNCTIONS ***************
+/* Returns the definition of a word
+*/
 QString DBQeurier::getDefinition(int lang_id, QString wordToFind){
     //QSqlQuery query("SELECT cebuano FROM language",db);
     /* query.exec("SELECT irish FROM language"); */
-    // qDebug() << language << wordToFind;
     qStm = QString("SELECT definition FROM word WHERE word = '%1' AND language_id = %2").arg(wordToFind.toLower()).arg(lang_id);
 
     QSqlQuery query(qStm,db);
@@ -41,11 +43,32 @@ QString DBQeurier::getDefinition(int lang_id, QString wordToFind){
     return output;
 }
 
-void DBQeurier::addEntry(QString word, int lang_id, QString def, QString pronun){
+/* Returns the definition and pronunctiation of a word as a list of String
+*/
+QStringList DBQeurier::getDictOutput(int lang_id, QString wordToFind){
+    qStm = QString("SELECT definition, pronunciation FROM word WHERE word = '%1' AND language_id = %2").arg(wordToFind.toLower()).arg(lang_id);
+    QSqlQuery query(qStm,db);
+    dictOutput.clear();
+    QStringList notInDB;
+    notInDB << " " << " ";
+    while(query.next()){
+        dictOutput << query.value(0).toString() <<  query.value(1).toString();
+    }
+    query.finish();
 
+    if(dictOutput.length() < 1){
+        return notInDB;
+    }
+    return dictOutput;
+}
+
+/* Adds a row in the words table, they are word, language ID, definition,
+ * pronunciation, image and sound files
+*/
+void DBQeurier::addEntry(QString word, int lang_id, QString def, QString pronun, QByteArray picByte, QByteArray soundByte){
     addSynEntry(word);
     //QString sQuery = "INSERT INTO test.people (id, first, last) VALUES(:id, :first, :last)";
-    qStm = QString("INSERT INTO finalproject.word (word, language_id, definition, pronunciation) VALUES(:word, :lang_id, :definition, :pronunciation)");
+    qStm = QString("INSERT INTO finalproject.word (word, language_id, definition, pronunciation, sound, image) VALUES(:word, :language_id, :definition, :pronunciation, :image, :sound)");
     qDebug() << qStm;
     QSqlQuery query;
     query.prepare(qStm);
@@ -53,11 +76,11 @@ void DBQeurier::addEntry(QString word, int lang_id, QString def, QString pronun)
     query.bindValue(":language_id", lang_id);
     query.bindValue(":definition", def);
     query.bindValue(":pronunciation", pronun);
-    //query.bindValue(":sound", sound);
-    //query.bindValue(":image", image);
+    query.bindValue(":sound", soundByte);
+    query.bindValue(":image", picByte);
 
     if(query.exec()){
-        QMessageBox::information(this, "Database Updated",
+        QMessageBox::information(this, "Word Added to Database",
             QString("The entry '%1 - %2' is added to the language ").arg(word).arg(def));
     } else {
         QMessageBox::warning(this, "Entry Error",
@@ -65,6 +88,33 @@ void DBQeurier::addEntry(QString word, int lang_id, QString def, QString pronun)
     }
 }
 
+/* This updates the definition of a word. lang_id is required to determine
+ * the language of the word.
+*/
+void DBQeurier::updateDefinition(int lang_id, QString word, QString newDef){
+    qStm = QString("UPDATE word SET definition = '%1' WHERE language_id = %2 AND word = '%3'").arg(newDef).arg(lang_id).arg(word);
+    qDebug() << word << " newDef is: " << newDef ;
+    QSqlQuery query;
+    query.prepare(qStm);
+
+    if(query.exec()){
+        QMessageBox::information(this, "Database Updated",
+                                 QString("The definition of %1' is updated").arg(word));
+    } else {
+        QMessageBox::warning(this, "Warning",
+                                 QString("The word %1' is not in database. Add it first.").arg(word));
+    }
+    /*qry.bindValue(":id","4");
+    qry.bindValue(":first","Heather");
+    qry.bindValue(":last","SuperMan");*/
+}
+
+
+
+
+// ***************   THESAURUS FUNCTIONS ***************
+/* Adds a word and its first synonym into the synonyms table
+*/
 void DBQeurier::addSynEntry(QString word, QString syn){
     qStm = QString("INSERT INTO finalproject.synonyms (word, synonyms) VALUES(:word, :synonyms)");
 
@@ -78,6 +128,11 @@ void DBQeurier::addSynEntry(QString word, QString syn){
     }
 }
 
+/* Adds a word into the synonyms table, words are still yet to be
+ * associated to it. This func is invoked by addWord, every time
+ * a word is added to the word table that word must also be added to
+ * the synonyms table.s
+*/
 void DBQeurier::addSynEntry(QString word){
     qStm = QString("INSERT INTO finalproject.synonyms (word) VALUES(:word)");
 
@@ -90,22 +145,8 @@ void DBQeurier::addSynEntry(QString word){
     }
 }
 
-void DBQeurier::updateDefinition(int lang_id, QString word, QString newDef){
-    qStm = QString("UPDATE word SET definition = '%1' WHERE language_id = %2 AND word = '%3'").arg(newDef).arg(lang_id).arg(word);
-    qDebug() << word << " newDef is: " << newDef ;
-    QSqlQuery query;
-    query.prepare(qStm);
-
-    if(query.exec()){
-        QMessageBox::information(this, "Database Updated",
-                                 QString("The definition of %1' is updated").arg(word));
-    }
-    /*qry.bindValue(":id","4");
-    qry.bindValue(":first","Heather");
-    qry.bindValue(":last","SuperMan");*/
-}
-
-//Thesaurus methods
+/* Gets the synoynms of the word supplied as argument
+*/
 QStringList DBQeurier::getSynonyms(int lang_id, QString word){
     // the synonyms of a word are on the third column of the table
     synonyms.clear();
@@ -125,16 +166,25 @@ QStringList DBQeurier::getSynonyms(int lang_id, QString word){
     return synonyms;
 }
 
+/* Updates an entry in the synonyms table. Adds a word as a
+ * sysnoynm to a word.
+*/
 void DBQeurier::associateWord(QString word, QString wordToAdd){
-    qStm = QString("UPDATE synonyms SET synonyms = CONCAT(synonyms, '%1|') WHERE word = '%2'").arg(wordToAdd.toLower()).arg(word.toLower());
+    qStm = QString("UPDATE synonyms SET synonyms = CONCAT(synonyms, '|%1') WHERE word = '%2'").arg(wordToAdd.toLower()).arg(word.toLower());
     QSqlQuery query;
     query.prepare(qStm);
     if(query.exec()){
         QMessageBox::information(this, "Synonym Added",
-                                 QString("The word '%1' now has a synonym '%2'").arg(word).arg(wordToAdd));
+                                 QString("The word '%1' now has the synonym '%2'").arg(word).arg(wordToAdd));
+    } else {
+        QMessageBox::warning(this, "Error",
+                                 QString("The word '%1' doesn't exist.").arg(word));
     }
 }
 
+/* Creates a new row in the language table. Each language has an id, name
+ * and ISO code.
+*/
 bool DBQeurier::addNewLanguage(int lang_id, QString language, QString iso_code){
     qStm = QString("INSERT INTO finalproject.language (language_id, language_name, iso_code) VALUES(:language_id, :language_name, :iso_code)");
     QSqlQuery query;
@@ -146,6 +196,10 @@ bool DBQeurier::addNewLanguage(int lang_id, QString language, QString iso_code){
     return query.exec();
 }
 
+// *************** GAMES FUNCTIONS ***************
+/* Returns a list of random words(8 words). They are needed in the games
+ * section. The domain of possible words increases as the level increases
+*/
 QStringList DBQeurier::getWordsSet(int lang_id, int level){
     /* SELECT word, definition FROM (
      *     SELECT word, definition FROM word
@@ -161,12 +215,15 @@ QStringList DBQeurier::getWordsSet(int lang_id, int level){
         // word and the definition or synonyms
         output = query.value(0).toString() + " : " +  query.value(1).toString();
         pairSet << output;
-        //qDebug() << "Got Here,,, Invokedd" << output;
     }
+
     query.finish();
     return pairSet;
 }
 
+/* Returns a list set of word:synonyms. This function is required
+ * by the Synonyms game
+*/
 QStringList DBQeurier::getSynSet(int lang_id, int level){
     /*  SELECT word, synonyms  FROM(
      *      SELECT word.word, synonyms FROM synonyms
@@ -187,6 +244,8 @@ QStringList DBQeurier::getSynSet(int lang_id, int level){
     return synonyms;
 }
 
+/* This function gets the byteArray of a word's picture or sound
+*/
 QByteArray DBQeurier::getSoundOrPicBytes(QString word, QString fileType){
     byteArray.clear();
     qStm = QString("SELECT %1 FROM word WHERE word = '%2'").arg(fileType).arg(word);
@@ -198,33 +257,19 @@ QByteArray DBQeurier::getSoundOrPicBytes(QString word, QString fileType){
     return byteArray;
 }
 
-void DBQeurier::storePic(QByteArray pByte){
-    /*QFile fileIn ("Beeth.wma");
-    if (fileIn.open (QIODevice::ReadOnly))
-    {
-    QByteArray wBData(fileIn.readAll());
-    QString DocData.append(wBData);
-    }
-    then insert into Tab(....)values(...Docdata);
-
-    QImage image("flower.jpg");
-    qDebug() << image.size();
-    QByteArray byteArray;
-    QBuffer buffer(&byteArray);
-    buffer.open(QIODevice::WriteOnly);
-    image.save(&buffer, "jpg");
-
-    query.prepare("INSERT INTO pictures (id, pic) VALUES (?, ?)");
-    query.addBindValue(1);
-    query.addBindValue(byteArray);
-    qDebug() << query.exec();*/
-}
-
-void DBQeurier::storeSound(QByteArray pByte){
+/* Function needed when a teacher decides to change the picture/sound of an word
+*/
+void DBQeurier::updateMediaFile(QString word){
+    qStm = QString("UPDATE word image = 'ByteArray' WHERE word = '%1'").arg(word);
+    QSqlQuery query;
+    query.prepare(qStm);
+    qDebug() << "Byte Stored " << query.exec();
 
 }
 
-
+/* This queries the database if the username and password entered
+ * by the user is in the database. Returns 1 if it is
+*/
 int DBQeurier::login(QString username, QString password){
     int count = 0;
     qStm = QString("SELECT * FROM teacher WHERE username = '%1'  AND password = '%2' ").arg(username).arg(password);
@@ -234,6 +279,5 @@ int DBQeurier::login(QString username, QString password){
         count++;
     }
 
-    qDebug() << count;
     return count;
 }

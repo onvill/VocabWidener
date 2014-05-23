@@ -12,6 +12,10 @@
 #include <QTranslator>
 #include "dbqeurier.h"
 #include <QLabel>
+#include "addword.h"
+#include "newlanguage.h"
+#include "updatedefinition.h"
+#include "addsynonym.h"
 
 
 namespace Ui {
@@ -40,14 +44,11 @@ private slots:
     void on_offTeacherMode_clicked();
     void on_actionTeacher_Login_triggered();
     void logInSuccess();
-
     void on_newLang_button_clicked();
-
     void on_addWord_button_clicked();
-
     void on_updateDef_button_clicked();
-
     void on_addSyn_button_clicked();
+    void on_soundButton_clicked();
 
 protected slots:
     void changeEvent(QEvent* event);
@@ -56,14 +57,18 @@ private:
     int buttonClicked;
     QStringList languageList;
     bool teacherMode;
+    QString wordSound;
     QTranslator translator;
 
     Ui::MainWindow *ui;
     QSqlTableModel *sqlTableModel;
-    //QSqlDatabase db;
     QStringListModel *stringListModel;
     DBQeurier *dbqe;
     QTranslator m_translator;
+    AddWord *newWord;
+    AddSynonym *addSyn;
+    NewLanguage *newLang;
+    UpdateDefinition *updateDef;
 
     void retranslate();
 };

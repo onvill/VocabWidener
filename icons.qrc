@@ -10,5 +10,7 @@
         <file>icons/accept.png</file>
         <file>icons/cross.png</file>
         <file>IconFarm/eye.png</file>
+        <file>IconFarm/image_add.png</file>
+        <file>IconFarm/sound_add.png</file>
     </qresource>
 </RCC>
