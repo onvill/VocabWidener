@@ -847,7 +847,7 @@
       </palette>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="page">
       <widget class="QLabel" name="gameMenuLabel">
@@ -1833,7 +1833,7 @@
         </item>
        </layout>
       </widget>
-     
+      <zorder>layoutWidget1</zorder>
       <zorder>gameMenuLabel</zorder>
       <zorder>langComboBox</zorder>
       <zorder>LangLabel</zorder>
@@ -2763,7 +2763,7 @@
         <property name="font">
          <font>
           <family>MV Boli</family>
-          <pointsize>16</pointsize>
+          <pointsize>18</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
@@ -2827,8 +2827,8 @@
          <rect>
           <x>520</x>
           <y>140</y>
-          <width>241</width>
-          <height>201</height>
+          <width>251</width>
+          <height>231</height>
          </rect>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
@@ -2951,7 +2951,7 @@
          <number>24</number>
         </property>
        </widget>
-       
+       <zorder>layoutWidget2</zorder>
        <zorder>wordContainer</zorder>
        <zorder>picture</zorder>
        <zorder>soundButton</zorder>
@@ -3428,7 +3428,7 @@
         <property name="font">
          <font>
           <family>MV Boli</family>
-          <pointsize>16</pointsize>
+          <pointsize>18</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
@@ -3470,70 +3470,6 @@
          <string>TextLabel</string>
         </property>
        </widget>
-       <widget class="QWidget" name="layoutWidget3">
-        <property name="geometry">
-         <rect>
-          <x>90</x>
-          <y>180</y>
-          <width>641</width>
-          <height>121</height>
-         </rect>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QPushButton" name="pushButton_AnswerA_26">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <family>MV Boli</family>
-             <pointsize>12</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="autoFillBackground">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Answer A</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="answerIndecator_3">
-           <property name="text">
-            <string>Correct  Indecator</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_AnswerB_26">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="font">
-            <font>
-             <family>MV Boli</family>
-             <pointsize>12</pointsize>
-             <weight>75</weight>
-             <bold>true</bold>
-            </font>
-           </property>
-           <property name="text">
-            <string>Answer B</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
        <widget class="QPushButton" name="exitSynGameButton">
         <property name="geometry">
          <rect>
@@ -3560,7 +3496,103 @@
          <number>24</number>
         </property>
        </widget>
-      
+       <widget class="QPushButton" name="pushButton_AnswerB_26">
+        <property name="geometry">
+         <rect>
+          <x>511</x>
+          <y>200</y>
+          <width>210</width>
+          <height>110</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>200</width>
+          <height>110</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>MV Boli</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Answer B</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton_AnswerA_26">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>200</y>
+          <width>210</width>
+          <height>110</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>210</width>
+          <height>110</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>MV Boli</family>
+          <pointsize>12</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Answer A</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="answerIndecator_3">
+        <property name="geometry">
+         <rect>
+          <x>370</x>
+          <y>210</y>
+          <width>90</width>
+          <height>90</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>90</width>
+          <height>90</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Correct  Indecator</string>
+        </property>
+       </widget>
+       <zorder>pushButton_AnswerB_26</zorder>
+       <zorder>pushButton_AnswerA_26</zorder>
+       <zorder>answerIndecator_3</zorder>
        <zorder>wordContainer_50</zorder>
        <zorder>questionIndecatorLabel_3</zorder>
        <zorder>exitSynGameButton</zorder>

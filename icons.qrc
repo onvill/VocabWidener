@@ -12,5 +12,7 @@
         <file>IconFarm/eye.png</file>
         <file>IconFarm/image_add.png</file>
         <file>IconFarm/sound_add.png</file>
+        <file>icons/correct-tick-hi.png</file>
+        <file>icons/X-400.png</file>
     </qresource>
 </RCC>

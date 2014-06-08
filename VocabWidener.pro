@@ -53,6 +53,6 @@ RC_FILE = myapp.rc
 RESOURCES += \
     languagesIcons.qrc \
     icons.qrc \
-    translation_files.qrc
+    sound.qrc
 
 

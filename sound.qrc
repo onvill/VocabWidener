@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>Sound/boing_spring.wav</file>
+        <file>Sound/chime_up.wav</file>
+    </qresource>
+</RCC>

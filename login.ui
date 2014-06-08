@@ -69,7 +69,14 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineEdit_userName"/>
+      <widget class="QLineEdit" name="lineEdit_userName">
+       <property name="maxLength">
+        <number>32767</number>
+       </property>
+       <property name="cursorPosition">
+        <number>0</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

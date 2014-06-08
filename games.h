@@ -23,7 +23,10 @@ class Games : public QDialog
 public:
     explicit Games(const QStringList& langList, QWidget *parent = 0);
     ~Games();
-    
+
+/* Slots are functions that are invoked if a signal is emitted. Eg. if a button
+ * is clicked, that emits a signal and the slot that its associated with is invoked.
+*/
 private slots:
     void on_soundButton_clicked();
     void on_pushButton_AnswerA_clicked();
@@ -51,6 +54,8 @@ private:
     QString ansOrBoggy2;
     DBQeurier *dbqe;
     QPixmap pixmap;
+    QImage correctMark;
+    QImage wrongMark;
 
     void setUpDefinitionGame();
     int randomInt();
@@ -62,6 +67,7 @@ private:
     void answerChecker(QString ans, int q);
     void nextQuestion();
     void gameFinished();
+    void delay();
 
     void setupSynonymGame();
     void nextSynQuestion();

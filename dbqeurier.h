@@ -12,6 +12,8 @@ class DBQeurier : public QMainWindow
 public:
     static DBQeurier* instance();
 
+    QStringList getLangList();
+
     //Dictionary methods
     QString getDefinition(int lang_id, QString wordToFind);
     QStringList getDictOutput(int lang_id, QString wordToFind);
@@ -30,11 +32,11 @@ public:
     QStringList getWordsSet(int lang_id, int level);
     QStringList getSynSet(int lang_id, int level);
     QByteArray getSoundOrPicBytes(QString word, QString fileType);
+    bool okToPlay(int lang_id);
 
     //Login
     int login(QString username, QString password);
 
-    void newlanguage();
     DBQeurier();
     ~DBQeurier(){};
 

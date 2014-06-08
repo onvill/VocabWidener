@@ -12,6 +12,8 @@ int main(int argc, char *argv[])
     splash->setPixmap(QPixmap(":/prog_icons/icons/cooltext1486342101 (1).png"));
     splash->show();
 
+    //QApplication::setWindowIcon(QIcon(":/prog_icons/icons/X-400.png"));
+
     MainWindow w;
 
     QTimer::singleShot(100,splash,SLOT(close()));

@@ -49,14 +49,10 @@ void AddWord::addClicked(){
         }
     }
 
-    /*Preview
-    QPixmap image = new QPixmap("blah.jpg");
-    QLabel imageLabel = new QLabel();
-    imageLabel.setPixmap(image);*/
-
-    QFile file(/* Path to the clicked file */);
 }
 
+/* Cancel button i clicked and close the window.
+*/
 void AddWord::cancelClicked(){
     qDebug() << "cancelClicked";
     close();
@@ -72,6 +68,9 @@ void AddWord::wavFilePath(QString path){
     qDebug() << "wavFilePath INVOKED" << " path is " << wavfilePath;
 }
 
+/* The get image button is clicked so open a file explorer for the user
+ * to find the image.
+*/
 void AddWord::on_imageButton_clicked(){
     FileExplorer fexo(this);
     fexo.setModal(true);
@@ -79,7 +78,8 @@ void AddWord::on_imageButton_clicked(){
     fexo.exec();
 }
 
-/*
+/* The get sound button is clicked so open a file explorer for the user
+ * to find the sound.
 */
 void AddWord::on_soundButton_clicked(){
     FileExplorer fexo(this);

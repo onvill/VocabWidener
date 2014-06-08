@@ -27,9 +27,19 @@ NewLanguage::~NewLanguage()
 void NewLanguage::addButtonClicked(){
     lang = ui->lineEdit_lang->text();
     iso = ui->lineEdit_iso->text();
-    if(!lang.isEmpty() && !iso.isEmpty()){
+    if(!lang.isEmpty() && lang.length() >= 4 && !iso.isEmpty()){
+        lang = lang.at(0).toUpper() + lang.mid(1);
         languagesCount++;
-        dbqe->addNewLanguage(languagesCount, lang, iso);
+        if(dbqe->addNewLanguage(languagesCount, lang, iso)){
+            QMessageBox::information(this, tr("New Language Added"),
+                                     QString(tr("The Language '%1' is added")).arg(lang));
+            emit newLanguage(lang);
+            this->close();
+        } else {
+            QMessageBox::warning(this, tr("Error"),
+                                     QString(tr("The Language '%1' is already added")).arg(lang));
+            languagesCount--;
+        }
     }
 
     qDebug() << "addButtonClicked";

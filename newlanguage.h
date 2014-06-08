@@ -16,6 +16,9 @@ public:
     explicit NewLanguage(const QStringList& langList, QWidget *parent = 0);
     ~NewLanguage();
 
+signals:
+    void newLanguage(QString newlang);
+
 private slots:
     void addButtonClicked();
     void cancelClicked();

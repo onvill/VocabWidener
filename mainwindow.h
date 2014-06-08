@@ -16,6 +16,7 @@
 #include "newlanguage.h"
 #include "updatedefinition.h"
 #include "addsynonym.h"
+#include <QShortcut>
 
 
 namespace Ui {
@@ -30,6 +31,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+/* Slots are functions that are invoked if a signal is emitted. Eg. if a button
+ * is clicked, that emits a signal and the slot that its associated with is invoked.
+*/
 private slots:
     void on_actionAbout_triggered();
     void on_actionSpanish_triggered();
@@ -49,6 +53,14 @@ private slots:
     void on_updateDef_button_clicked();
     void on_addSyn_button_clicked();
     void on_soundButton_clicked();
+    void updateLangList(QString lang);
+    void on_actionSpanish_hovered();
+    void on_actionCebuano_hovered();
+    void on_actionAbout_hovered();
+    void on_actionExit_hovered();
+    void on_actionIrish_hovered();
+    void on_actionEnglish_hovered();
+    void on_actionTeacher_Login_hovered();
 
 protected slots:
     void changeEvent(QEvent* event);
@@ -59,6 +71,7 @@ private:
     bool teacherMode;
     QString wordSound;
     QTranslator translator;
+    QLabel *statusLabel;
 
     Ui::MainWindow *ui;
     QSqlTableModel *sqlTableModel;
@@ -69,8 +82,13 @@ private:
     AddSynonym *addSyn;
     NewLanguage *newLang;
     UpdateDefinition *updateDef;
+    QShortcut *newLangShortcut;
+    QShortcut *addWordShortcut;
+    QShortcut *updateDefShortcut;
+    QShortcut *addSynShortcut;
 
     void retranslate();
+    void delay();
 };
 
 #endif // MAINWINDOW_H

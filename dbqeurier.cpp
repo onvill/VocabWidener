@@ -26,6 +26,47 @@ DBQeurier* DBQeurier::instance()
     return m_instance;
 }
 
+/* Gets the list of languages from the the language table.
+ * This list will then be used into the combo box
+*/
+QStringList DBQeurier::getLangList(){
+    qStm = QString("SELECT language_name FROM language ORDER BY language_id ASC");
+    QSqlQuery query(qStm,db);
+    QStringList langList;
+
+    while(query.next()){
+        langList << query.value(0).toString() ;
+    }
+    query.finish();
+
+    return langList;
+}
+
+/* Returns a boolean value depending if there's enough entries in the selected
+ * language to play either of the games. Counts the number of entries and checks
+ * if its less than 32(4 levels).
+*/
+bool DBQeurier::okToPlay(int lang_id){
+    int count = 0;
+    bool ok = false;
+    qStm = QString("SELECT * FROM word WHERE language_id = %1").arg(lang_id);
+    QSqlQuery query(qStm, db);
+    while(query.next()){
+        count++;
+    }
+
+    if(count <= 32){
+        ok = false;
+        QMessageBox::warning(this, tr("Can't Play"),
+            QString(tr("Not Enough entries in the selected language.\nPlease pick a different language.")));
+    } else {
+        ok = true;
+    }
+
+    return ok;
+}
+
+
 // *************** DICTIONARY FUNCTIONS ***************
 /* Returns the definition of a word
 */
@@ -80,11 +121,7 @@ void DBQeurier::addEntry(QString word, int lang_id, QString def, QString pronun,
     query.bindValue(":image", picByte);
 
     if(query.exec()){
-        QMessageBox::information(this, "Word Added to Database",
-            QString("The entry '%1 - %2' is added to the language ").arg(word).arg(def));
-    } else {
-        QMessageBox::warning(this, "Entry Error",
-            QString("There's a problem adding entry. %1 is probably added already.").arg(word));
+        qDebug() << "Syn added";
     }
 }
 
@@ -98,19 +135,9 @@ void DBQeurier::updateDefinition(int lang_id, QString word, QString newDef){
     query.prepare(qStm);
 
     if(query.exec()){
-        QMessageBox::information(this, "Database Updated",
-                                 QString("The definition of %1' is updated").arg(word));
-    } else {
-        QMessageBox::warning(this, "Warning",
-                                 QString("The word %1' is not in database. Add it first.").arg(word));
+        qDebug() << "Syn added";
     }
-    /*qry.bindValue(":id","4");
-    qry.bindValue(":first","Heather");
-    qry.bindValue(":last","SuperMan");*/
 }
-
-
-
 
 // ***************   THESAURUS FUNCTIONS ***************
 /* Adds a word and its first synonym into the synonyms table
@@ -124,7 +151,11 @@ void DBQeurier::addSynEntry(QString word, QString syn){
     query.bindValue(":synonyms", syn + "|");
 
     if(query.exec()){
-        qDebug() << "Synonym table appended";
+        QMessageBox::information(this, tr("Synonym Entry"),
+                                 QString(tr("Synonym Entry added")));
+    } else {
+        QMessageBox::warning(this, tr("Synonym Entry"),
+                                 QString(tr("Failed to add Synonym Entry. ")).arg(word));
     }
 }
 
@@ -141,7 +172,11 @@ void DBQeurier::addSynEntry(QString word){
     query.bindValue(":word", word);
 
     if(query.exec()){
-        qDebug() << word << " is Added!";
+        QMessageBox::information(this, tr("Synonym Entry"),
+                                 QString(tr("Synonym Entry added")));
+    } else {
+        QMessageBox::warning(this, tr("Synonym Entry"),
+                                 QString(tr("Failed to add Synonym Entry. ")).arg(word));
     }
 }
 
@@ -160,8 +195,6 @@ QStringList DBQeurier::getSynonyms(int lang_id, QString word){
     synonyms = output.split("|");
     output = "";
     query.finish();
-    /*QMessageBox::warning(this, "Word not in Database",
-        QString("%1 is not in the database").arg(word));*/
 
     return synonyms;
 }
@@ -174,11 +207,11 @@ void DBQeurier::associateWord(QString word, QString wordToAdd){
     QSqlQuery query;
     query.prepare(qStm);
     if(query.exec()){
-        QMessageBox::information(this, "Synonym Added",
-                                 QString("The word '%1' now has the synonym '%2'").arg(word).arg(wordToAdd));
+        QMessageBox::information(this, tr("Synonym Added"),
+                                 QString(tr("The word '%1' now has the synonym '%2'")).arg(word).arg(wordToAdd));
     } else {
-        QMessageBox::warning(this, "Error",
-                                 QString("The word '%1' doesn't exist.").arg(word));
+        QMessageBox::warning(this, tr("Synonym Error"),
+                                 QString(tr("The word '%1' doesn't exist.")).arg(word));
     }
 }
 
@@ -258,13 +291,13 @@ QByteArray DBQeurier::getSoundOrPicBytes(QString word, QString fileType){
 }
 
 /* Function needed when a teacher decides to change the picture/sound of an word
+ * NOT Used
 */
 void DBQeurier::updateMediaFile(QString word){
     qStm = QString("UPDATE word image = 'ByteArray' WHERE word = '%1'").arg(word);
     QSqlQuery query;
     query.prepare(qStm);
     qDebug() << "Byte Stored " << query.exec();
-
 }
 
 /* This queries the database if the username and password entered
