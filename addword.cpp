@@ -47,6 +47,9 @@ void AddWord::addClicked(){
             QByteArray wavBytes(wavFile.readAll());
             dbqe->addEntry(word, lang_index, definition, pronunciation, wavBytes, byteArray);
         }
+        ui->lineEdit_word->clear();
+        ui->lineEdit_Definition->clear();
+        ui->lineEdit_Pronun->clear();
     }
 
 }
